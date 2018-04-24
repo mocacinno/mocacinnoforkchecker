@@ -11,8 +11,12 @@ def main():
 	parser.add_argument("--addressfile", help="query all addresses in this file")
 	parser.add_argument("--fork", help="query a single fork")
 	parser.add_argument("--showforks", help="show all forks" , action='store_true')
+	parser.add_argument("--outfile", help="output to this file instead of stdout (screen)")
 	parser.add_argument("--timeout", help="number of seconds to wait between 2 requests", nargs='?', const=2, type=int)
 	args = parser.parse_args()
+	if args.outfile:
+		sys.stdout = open(args.outfile, 'w')
+
 	if args.showforks:
 		print "available forks:"
 		print "****************"
