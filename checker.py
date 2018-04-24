@@ -10,12 +10,14 @@ def main():
 	available_forks = {
 		"B2X": get_b2x, 			#Bitcoin Segwit2X			#working
 		"BCA": get_bca, 			#Bitcoin Atom				#manual	
+		"BCD": get_bcd, 			#Bitcoin Diamond			#manual	
 		"BCH": get_bch, 			#Bitcoin Cash				#working
 		"BCHC": get_bchc, 			#Bitcoin Clashic			#working
 		"BCI": get_bci, 			#Bitcoin Intrest			#working
 		"BCX" : get_bcx, 			#BitcoinX					#working
 		"BPA" : get_bpa, 			#Bitcoin Pizza				#working
 		"BTC" : get_btc,			#Bitcoin					#working
+		"BTCP" : get_btcp,			#Bitcoin platinum			#no explorer
 		"BTF": get_btf, 			#Bitcoin Faith				#no explorer
 		"BTG": get_btg, 			#Bitcoin Gold				#working
 		"BTH": get_bth,				#Bitcoin Hot				#no explorer
@@ -219,6 +221,9 @@ def get_btw(address):
 def get_btf(address):
 	print "\tdidn't find a single explorer for bitcoin faith (btf) (prefix 36)"
 
+def get_btcp(address):
+	print "\tdidn't find a single explorer for bitcoin platinum (btcp)"
+	
 def get_bcx(address):
 	chain = "BCX"
 	address = veranderprefix(address, 75)
@@ -240,6 +245,10 @@ def get_b2x(address):
 	
 def get_lbtc(address):
 	print "\tLBTC api down, check manually at explorer.lbtc.io"
+
+def get_bcd(address):
+	print "\tLBTC api down, check manually at explorer.btcd.io"
+	
 
 def get_btg(address):
 	chain = "BTG"
