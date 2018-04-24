@@ -3,12 +3,15 @@ import argparse
 import requests
 import base58
 import time
+import urllib3
+import json
 
 def main():
 	available_forks = {
 		"B2X": get_b2x, 			#Bitcoin Segwit2X			#working
 		"BCA": get_bca, 			#Bitcoin Atom				#manual	
 		"BCH": get_bch, 			#Bitcoin Cash				#working
+		"BCHC": get_bchc, 			#Bitcoin Clashic			#working
 		"BCI": get_bci, 			#Bitcoin Intrest			#working
 		"BCX" : get_bcx, 			#BitcoinX					#working
 		"BPA" : get_bpa, 			#Bitcoin Pizza				#working
@@ -100,9 +103,9 @@ def veranderprefix(address, prefix):
 		print "could not convert address " + address + " using prefix " + prefix 
 
 def frominsightapi(address, baseurl, chain):
+	stderror = "\t something went wrong while querying the api for address " + address + " on the " + chain + " chain, using the insight api on " + baseurl
 	try:
 		r = requests.get(baseurl + 'addr/%s/?noTxList=1' % address)
-		stderror = "\t something went wrong while querying the api for address " + address + " on the " + chain + " chain, using the insight api on " + baseurl
 		if r.text != 'Invalid address: Address has mismatched network type.. Code:1':
 			balance = r.json()['balance']
 			try:
@@ -114,6 +117,24 @@ def frominsightapi(address, baseurl, chain):
 		else :
 			print stderror
 			return 0
+	except:
+		print stderror
+		return 0
+		
+def frominsightapi_urllib3(address, baseurl, chain):
+	#only use this one if incorrect depreciation warnings are shown when using the fromsightapi function
+	urllib3.disable_warnings()
+	stderror = "\t something went wrong while querying the api for address " + address + " on the " + chain + " chain, using the insight api on " + baseurl
+	try:
+		http = urllib3.PoolManager()
+		r = http.request('get', baseurl + 'addr/%s/?noTxList=1' % address)
+		balance = json.loads(r.data)['balance']
+		try:
+		   val = float(balance)
+		   return val
+		except ValueError:
+		   print stderror
+		   return 0
 	except:
 		print stderror
 		return 0
@@ -146,7 +167,11 @@ def fromiquidus(address, baseurl, chain):
 		print stderror
 		return 0
 ###############################################################################################		
-
+def get_bchc(address):
+	chain = "BCHC"
+	print "\t checking address " + address + " on the " + chain + " chain"	
+	return frominsightapi_urllib3(address, 'https://truevisionofsatoshi.com/api/', chain)	
+	
 def get_btc(address):	
 	chain = "BTC"
 	print "\t checking address " + address + " on the " + chain + " chain"	
