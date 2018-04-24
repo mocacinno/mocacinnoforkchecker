@@ -5,7 +5,7 @@ import base58
 import time
 
 def main():
-	available_forks = {"BCH": get_bch, "BTG": get_btg, "BTX": get_btx, "SUPERBTC": get_superbtc, "B2X": get_b2x, "LBTC": get_lbtc}
+	available_forks = {"BCH": get_bch, "BTG": get_btg, "BTX": get_btx, "SUPERBTC": get_superbtc, "B2X": get_b2x, "LBTC": get_lbtc, "BCX" : get_bcx}
 	parser = argparse.ArgumentParser()
 	parser.add_argument("--address", help="query a single address")
 	parser.add_argument("--addressfile", help="query all addresses in this file")
@@ -63,13 +63,30 @@ def main():
 		print "***********"
 	for success in successes:
 		print success
-	
+
+		
+def get_bcx(address):
+	try:
+		decoded = base58.b58decode_check(address)
+		decoded = bytearray(decoded)
+		decoded[0] = 75
+		address_bcx = base58.b58encode_check(bytes(decoded))
+		print "\t address " + address + " was converted to BCX address " + address_bcx	
+		r = requests.get('https://bcx.info/insight-api/addr/%s/?noTxList=1' % address_bcx)
+		if r.text != 'Invalid address: Address has mismatched network type.. Code:1':
+			balance = r.json()['balance']
+			return balance
+		else :
+			print "\tsomething went wrong while checking " + str(address) + " on the BCX chain"
+			return 0
+	except:
+		print "\tsomething went wrong while checking " + str(address) + " on the BCX chain"
+		return 0
+			
 def get_bch(address):
 	try:
 		r = requests.get('https://bitcoincash.blockexplorer.com/api/addr/%s/?noTxList=1' % address)
 		balance = r.json()['balance']
-		if balance == 0:
-			return 0
 		return balance
 	except:
 		print "\tsomething went wrong while checking " + str(address) + " on the BCH chain"
@@ -78,8 +95,6 @@ def get_bch(address):
 def get_btx(address):
 	try:
 		r = requests.get('https://chainz.cryptoid.info/btx/api.dws?q=getbalance&a=%s' % address)
-		if r.text == 0:
-			return 0
 		return r.text
 	except:
 		print "\tsomething went wrong while checking " + str(address) + " on the BTX chain"
@@ -102,8 +117,6 @@ def get_b2x(address):
 	try:
 		r = requests.get('https://explorer.b2x-segwit.io/b2x-insight-api/addr/%s/?noTxList=1' % address)
 		balance = r.json()['balance']
-		if balance == 0:
-			return 0
 		return balance
 	except:
 		print "\tsomething went wrong while checking " + str(address) + " on the B2X chain"
@@ -121,8 +134,6 @@ def get_btg(address):
 		print "\t address " + address + " was converted to BTG address " + address_btg
 		r = requests.get('https://btgexplorer.com/api/addr/%s/?noTxList=1' % address_btg)
 		balance = r.json()['balance']
-		if balance == 0:
-			return 0
 		return balance
 	except:
 		print "\tsomething went wrong while checking " + str(address) + " on the BTG chain"
