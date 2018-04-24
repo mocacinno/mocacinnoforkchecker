@@ -16,3 +16,12 @@ The fork parameter is mandatory... If it is not used, ALL available forks are te
 The showforks parameter is mandatory, don't use it if you want to execute a real test  
 The timeout parameter is mandatory and defaults to 2 seconds  
 
+  
+  
+  
+  
+  
+sources:  
+https://github.com/mocacinno/bitcoin_fork_claimer/ => extra forks  
+https://github.com/foozzi/bitcoin-fork-checker => basic idear  
+https://bitcointalk.org/index.php?topic=2749969.0 => extra forks  
