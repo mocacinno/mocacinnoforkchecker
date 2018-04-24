@@ -5,7 +5,15 @@ import base58
 import time
 
 def main():
-	available_forks = {"BCH": get_bch, "BTG": get_btg, "BTX": get_btx, "SUPERBTC": get_superbtc, "B2X": get_b2x, "LBTC": get_lbtc, "BCX" : get_bcx}
+	available_forks = {
+		"B2X": get_b2x, 
+		"BCH": get_bch, 
+		"BCX" : get_bcx
+		"BTG": get_btg, 
+		"BTX": get_btx, 
+		"LBTC": get_lbtc,
+		"SUPERBTC": get_superbtc, 
+	}
 	parser = argparse.ArgumentParser()
 	parser.add_argument("--address", help="query a single address")
 	parser.add_argument("--addressfile", help="query all addresses in this file")
