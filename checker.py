@@ -88,169 +88,140 @@ def main():
 	for success in successes:
 		print success
 
-		
-###############################################################################################		
-		
-def get_btc(address):
-	try:
-		r = requests.get('https://chainz.cryptoid.info/btx/api.dws?q=getbalance&a=%s' % address)
-		return r.text
-	except:
-		print "\tsomething went wrong while checking " + str(address) + " on the BTC chain"
-		return 0	
-		
-def get_bci(address):
+
+def veranderprefix(address, prefix):
 	try:
 		decoded = base58.b58decode_check(address)
 		decoded = bytearray(decoded)
-		decoded[0] = 102
-		address_bci = base58.b58encode_check(bytes(decoded))
-		print "\t address " + address + " was converted to BCI address " + address_bci	
-		r = requests.get('https://explorer.bitcoininterest.io/api/addr/%s/?noTxList=1' % address_bci)
+		decoded[0] = prefix
+		newaddress = base58.b58encode_check(bytes(decoded))
+		return newaddress
+	except:
+		print "could not convert address " + address + " using prefix " + prefix 
+
+def frominsightapi(address, baseurl, chain):
+	try:
+		r = requests.get(baseurl + 'addr/%s/?noTxList=1' % address)
+		stderror = "\t something went wrong while querying the api for address " + address + " on the " + chain + " chain, using the insight api on " + baseurl
 		if r.text != 'Invalid address: Address has mismatched network type.. Code:1':
 			balance = r.json()['balance']
-			return balance
+			try:
+			   val = float(balance)
+			   return val
+			except ValueError:
+			   print stderror
+			   return 0
 		else :
-			print "\tsomething went wrong while checking " + str(address) + " on the BCI chain"
+			print stderror
 			return 0
 	except:
-		print "\tsomething went wrong while checking " + str(address) + " on the BCI chain"
-		return 0		
+		print stderror
+		return 0
+
+def fromchainz(address, baseurl, chain):
+	try:
+		r = requests.get(baseurl + 'api.dws?q=getbalance&a=%s' % address)
+		stderror = "\t something went wrong while querying the api for address " + address + " on the " + chain + " chain, using the insight api on " + baseurl
+		try:
+			val = float(r.text)
+			return val
+		except ValueError:
+			print stderror
+			return 0
+	except:
+		print stderror
+		return 0
+		
+def fromiquidus(address, baseurl, chain):
+	try:
+		r = requests.get(baseurl + 'getbalance/%s' % address)
+		stderror = "\t something went wrong while querying the api for address " + address + " on the " + chain + " chain, using the insight api on " + baseurl
+		try:
+			val = float(r.text)
+			return val
+		except ValueError:
+			print stderror
+			return 0
+	except:
+		print stderror
+		return 0
+###############################################################################################		
+
+def get_btc(address):	
+	chain = "BTC"
+	print "\t checking address " + address + " on the " + chain + " chain"	
+	return fromchainz(address, 'https://chainz.cryptoid.info/btc/', chain)		
+		
+def get_bci(address):
+	chain = "BCI"
+	address = veranderprefix(address, 102)
+	print "\t checking address " + address + " on the " + chain + " chain"	
+	return frominsightapi(address, 'https://explorer.bitcoininterest.io/api/', chain)	
+	
+def get_btx(address):	
+	chain = "BCX"
+	print "\t checking address " + address + " on the " + chain + " chain"	
+	return fromchainz(address, 'https://chainz.cryptoid.info/btx/', chain)	
 		
 		
 def get_bca(address):
-	#BCA 23
-	print "\tno explorer with an api found, check manually on https://bitcoinatom.net/"
+	print "\tno explorer with an api found, check manually on https://bitcoinatom.net/ (prefix 23)"
 		
 def get_btsq(address):
-	#BTW 63
-	print "\tdidn't find a single explorer for bitcoin community (btsq)"
-		
+	print "\tdidn't find a single explorer for bitcoin community (btsq) (prefix 63)"
+
 def get_cdy(address):
-	try:
-		decoded = base58.b58decode_check(address)
-		decoded = bytearray(decoded)
-		decoded[0] = 0x1c
-		address_cdy = base58.b58encode_check(bytes(decoded))
-		print "\t address " + address + " was converted to CDY address " + address_cdy	
-		r = requests.get('http://block.cdy.one/insight-api/addr/%s/?noTxList=1' % address_cdy)
-		if r.text != 'Invalid address: Address has mismatched network type.. Code:1':
-			balance = r.json()['balance']
-			return balance
-		else :
-			print "\tsomething went wrong while checking " + str(address) + " on the CDY chain"
-			return 0
-	except:
-		print "\tsomething went wrong while checking " + str(address) + " on the CDY chain"
-		return 0
+	chain = "CDY"
+	address = veranderprefix(address, 0x1c)
+	print "\t checking address " + address + " on the " + chain + " chain"	
+	return frominsightapi(address, 'http://block.cdy.one/insight-api/', chain)	
 		
 def get_bth(address):
-	#BTW 40
-	print "\tdidn't find a single explorer for bitcoin hot (bth)"
+	print "\tdidn't find a single explorer for bitcoin hot (bth) (prefix 40)"
 
 def get_btp(address):
-	#BTW 0x38
-	print "\tdidn't find a single explorer for bitcoin pay (btp)"
+	print "\tdidn't find a single explorer for bitcoin pay (btp) (prefix 0x38)"
 
 def get_bpa(address):
-	try:
-		decoded = base58.b58decode_check(address)
-		decoded = bytearray(decoded)
-		decoded[0] = 55
-		address_bpa = base58.b58encode_check(bytes(decoded))
-		print "\t address " + address + " was converted to BPA address " + address_bpa	
-		r = requests.get('http://47.100.55.227/ext/getbalance/%s' % address_bpa)
-		balance = r.text
-		if balance.isnumeric():
-			return balance
-		else :
-			print "\tsomething went wrong while checking " + str(address) + " on the BPA chain"
-			return 0
-	except:
-		print "\tsomething went wrong while checking " + str(address) + " on the BPA chain"
-		return 0
+	chain = "BPA"
+	address = veranderprefix(address, 55)
+	print "\t checking address " + address + " on the " + chain + " chain"	
+	return fromiquidus(address, 'http://47.100.55.227/ext/', chain)
 
 def get_btw(address):
-	#BTW 73
-	print "\tdidn't find a single explorer for bitcoin world (btw)"
+	print "\tdidn't find a single explorer for bitcoin world (btw) (prefix 73)"
 	
 def get_btf(address):
-	#BTF 36
-	print "\tdidn't find a single explorer for bitcoin faith (btf)"
-		
-def get_bcx(address):
-	try:
-		decoded = base58.b58decode_check(address)
-		decoded = bytearray(decoded)
-		decoded[0] = 75
-		address_bcx = base58.b58encode_check(bytes(decoded))
-		print "\t address " + address + " was converted to BCX address " + address_bcx	
-		r = requests.get('https://bcx.info/insight-api/addr/%s/?noTxList=1' % address_bcx)
-		if r.text != 'Invalid address: Address has mismatched network type.. Code:1':
-			balance = r.json()['balance']
-			return balance
-		else :
-			print "\tsomething went wrong while checking " + str(address) + " on the BCX chain"
-			return 0
-	except:
-		print "\tsomething went wrong while checking " + str(address) + " on the BCX chain"
-		return 0
-			
-def get_bch(address):
-	try:
-		r = requests.get('https://bitcoincash.blockexplorer.com/api/addr/%s/?noTxList=1' % address)
-		balance = r.json()['balance']
-		return balance
-	except:
-		print "\tsomething went wrong while checking " + str(address) + " on the BCH chain"
-		return 0
-			
-def get_btx(address):
-	try:
-		r = requests.get('https://chainz.cryptoid.info/btx/api.dws?q=getbalance&a=%s' % address)
-		return r.text
-	except:
-		print "\tsomething went wrong while checking " + str(address) + " on the BTX chain"
-		return 0
+	print "\tdidn't find a single explorer for bitcoin faith (btf) (prefix 36)"
 
+def get_bcx(address):
+	chain = "BCX"
+	address = veranderprefix(address, 75)
+	print "\t checking address " + address + " on the " + chain + " chain"	
+	return frominsightapi(address, 'https://bcx.info/insight-api/', chain)	
+	
+def get_bch(address):
+	chain = "BCH"
+	print "\t checking address " + address + " on the " + chain + " chain"	
+	return frominsightapi(address, 'https://bitcoincash.blockexplorer.com/api/', chain)	
+				
 def get_superbtc(address):
-	#try:
-	#	r = requests.get('http://block.superbtc.org/insight-api/addr/%s/?noTxList=1' % address)
-	#	balance = r.json()['balance']
-	#	if balance == 0:
-	#		return 0
-	#	return balance
-	#except:
-	#	print "something went wrong while checking " + str(address) + " on the SUPERBTC chain"
-	#	return 0
 	print "\tSUPERBTC api down, check manually at block.superbtc.org"
 	
-	
 def get_b2x(address):
-	try:
-		r = requests.get('https://explorer.b2x-segwit.io/b2x-insight-api/addr/%s/?noTxList=1' % address)
-		balance = r.json()['balance']
-		return balance
-	except:
-		print "\tsomething went wrong while checking " + str(address) + " on the B2X chain"
-		return 0
+	chain = "B2X"
+	print "\t checking address " + address + " on the " + chain + " chain"	
+	return frominsightapi(address, 'https://explorer.b2x-segwit.io/b2x-insight-api/', chain)	
 	
 def get_lbtc(address):
 	print "\tLBTC api down, check manually at explorer.lbtc.io"
 
 def get_btg(address):
-	try:
-		decoded = base58.b58decode_check(address)
-		decoded = bytearray(decoded)
-		decoded[0] = 38
-		address_btg = base58.b58encode_check(bytes(decoded))
-		print "\t address " + address + " was converted to BTG address " + address_btg
-		r = requests.get('https://btgexplorer.com/api/addr/%s/?noTxList=1' % address_btg)
-		balance = r.json()['balance']
-		return balance
-	except:
-		print "\tsomething went wrong while checking " + str(address) + " on the BTG chain"
-		return 0
+	chain = "BTG"
+	address = veranderprefix(address, 38)
+	print "\t checking address " + address + " on the " + chain + " chain"	
+	return frominsightapi(address, 'https://btgexplorer.com/api/', chain)	
+
 
 if __name__ == '__main__':
 	main()
