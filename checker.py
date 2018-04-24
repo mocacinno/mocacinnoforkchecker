@@ -5,7 +5,7 @@ import base58
 import time
 
 def main():
-	available_forks = {"BCH": get_bch, "BTG": get_btg, "BTX": get_btx, "SUPERBTC": get_superbtc}
+	available_forks = {"BCH": get_bch, "BTG": get_btg, "BTX": get_btx, "SUPERBTC": get_superbtc, "B2X": get_b2x}
 	parser = argparse.ArgumentParser()
 	parser.add_argument("--address", help="query a single address")
 	parser.add_argument("--addressfile", help="query all addresses in this file")
@@ -54,9 +54,10 @@ def main():
 			time.sleep(timeout)
 	if len(successes) > 0:
 		print
-		print
-		print "found unspent outputs on one or more chains!!!"
-		print "claim at your own risk!"
+		print "**************************************************"
+		print "* found unspent outputs on one or more chains!!! *"
+		print "* claim at your own risk!                        *"
+		print "**************************************************"
 		print
 		print "successlist"
 		print "***********"
@@ -95,8 +96,19 @@ def get_superbtc(address):
 	#	print "something went wrong while checking " + str(address) + " on the SUPERBTC chain"
 	#	return 0
 	print "\tSUPERBTC api down, check manually at block.superbtc.org"
-		
-		
+	
+	
+def get_b2x(address):
+	try:
+		r = requests.get('https://explorer.b2x-segwit.io/b2x-insight-api/addr/%s/?noTxList=1' % address)
+		balance = r.json()['balance']
+		if balance == 0:
+			return 0
+		return balance
+	except:
+		print "\tsomething went wrong while checking " + str(address) + " on the B2X chain"
+		return 0
+	
 		
 def get_btg(address):
 	try:
