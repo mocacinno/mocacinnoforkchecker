@@ -1,4 +1,4 @@
-# mocacinnoforkchecker  
+# mocacinno fork checker  
 i got the idear from foozzi/bitcoin-fork-checker and also used part of his functions  
   
 reqs: python 2.7 with modules sys, argparse, requests, time and base58  
