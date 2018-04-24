@@ -5,7 +5,7 @@ import base58
 import time
 
 def main():
-	available_forks = {"BCH": get_bch, "BTG": get_btg}
+	available_forks = {"BCH": get_bch, "BTG": get_btg, "BTX": get_btx}
 	parser = argparse.ArgumentParser()
 	parser.add_argument("--address", help="query a single address")
 	parser.add_argument("--addressfile", help="query all addresses in this file")
@@ -52,30 +52,40 @@ def main():
 		time.sleep(timeout)	
 	
 def get_bch(address):
-		try:
-			r = requests.get('https://bitcoincash.blockexplorer.com/api/addr/%s/?noTxList=1' % address)
-			balance = r.json()['balance']
-			if balance == 0:
-				return 0
-			return balance
-		except:
-			print "something went wrong while checking " + str(address) + " on the BCH chain"
+	try:
+		r = requests.get('https://bitcoincash.blockexplorer.com/api/addr/%s/?noTxList=1' % address)
+		balance = r.json()['balance']
+		if balance == 0:
 			return 0
+		return balance
+	except:
+		print "something went wrong while checking " + str(address) + " on the BCH chain"
+		return 0
+			
+def get_btx(address):
+	try:
+		r = requests.get('https://chainz.cryptoid.info/btx/api.dws?q=getbalance&a=%s' % address)
+		if r.text == 0:
+			return 0
+		return r.text
+	except:
+		print "something went wrong while checking " + str(address) + " on the BTX chain"
+		return 0
 			
 def get_btg(address):
-		try:
-			decoded = base58.b58decode_check(address)
-			decoded = bytearray(decoded)
-			decoded[0] = 38
-			address_btg = base58.b58encode_check(bytes(decoded))
-			r = requests.get('https://btgexplorer.com/api/addr/%s/?noTxList=1' % address_btg)
-			balance = r.json()['balance']
-			if balance == 0:
-				return 0
-			return balance
-		except:
-			print "something went wrong while checking " + str(address) + " on the BTG chain"
+	try:
+		decoded = base58.b58decode_check(address)
+		decoded = bytearray(decoded)
+		decoded[0] = 38
+		address_btg = base58.b58encode_check(bytes(decoded))
+		r = requests.get('https://btgexplorer.com/api/addr/%s/?noTxList=1' % address_btg)
+		balance = r.json()['balance']
+		if balance == 0:
 			return 0
+		return balance
+	except:
+		print "something went wrong while checking " + str(address) + " on the BTG chain"
+		return 0
 
 if __name__ == '__main__':
 	main()
