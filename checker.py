@@ -12,6 +12,7 @@ def main():
 		"BCI": get_bci, 	#Bitcoin Intrest
 		"BCX" : get_bcx, 	#BitcoinX
 		"BPA" : get_bpa, 	#Bitcoin Pizza
+		"BTC" : get_btc,	#Bitcoin
 		"BTF": get_btf, 	#Bitcoin Faith
 		"BTG": get_btg, 	#Bitcoin Gold
 		"BTH": get_bth,		#Bitcoin Hot
@@ -86,6 +87,15 @@ def main():
 		print success
 
 		
+###############################################################################################		
+		
+def get_btc(address):
+	try:
+		r = requests.get('https://chainz.cryptoid.info/btx/api.dws?q=getbalance&a=%s' % address)
+		return r.text
+	except:
+		print "\tsomething went wrong while checking " + str(address) + " on the BTC chain"
+		return 0	
 		
 def get_bci(address):
 	try:
