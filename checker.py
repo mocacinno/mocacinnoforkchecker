@@ -6,23 +6,23 @@ import time
 
 def main():
 	available_forks = {
-		"B2X": get_b2x, 	#Bitcoin Segwit2X
-		"BCA": get_bca, 	#Bitcoin Atom
-		"BCH": get_bch, 	#Bitcoin Cash
-		"BCI": get_bci, 	#Bitcoin Intrest
-		"BCX" : get_bcx, 	#BitcoinX
-		"BPA" : get_bpa, 	#Bitcoin Pizza
-		"BTC" : get_btc,	#Bitcoin
-		"BTF": get_btf, 	#Bitcoin Faith
-		"BTG": get_btg, 	#Bitcoin Gold
-		"BTH": get_bth,		#Bitcoin Hot
-		"BTP": get_btp,		#Bitcoin Pay
-		"BTSQ": get_btsq,	#Bitcoin Community
-		"BTW": get_btw, 	#Bitcoin World
-		"BTX": get_btx, 	#Bitcore
-		"CDY": get_cdy, 	#Bitcoin Candy (for of BCH)
-		"LBTC": get_lbtc,	#Lightning Bitcoin
-		"SUPERBTC": get_superbtc, 
+		"B2X": get_b2x, 			#Bitcoin Segwit2X			#working
+		"BCA": get_bca, 			#Bitcoin Atom				#manual	
+		"BCH": get_bch, 			#Bitcoin Cash				#working
+		"BCI": get_bci, 			#Bitcoin Intrest			#working
+		"BCX" : get_bcx, 			#BitcoinX					#working
+		"BPA" : get_bpa, 			#Bitcoin Pizza				#working
+		"BTC" : get_btc,			#Bitcoin					#working
+		"BTF": get_btf, 			#Bitcoin Faith				#no explorer
+		"BTG": get_btg, 			#Bitcoin Gold				#working
+		"BTH": get_bth,				#Bitcoin Hot				#no explorer
+		"BTP": get_btp,				#Bitcoin Pay				#no explorer
+		"BTSQ": get_btsq,			#Bitcoin Community			#no explorer
+		"BTW": get_btw, 			#Bitcoin World				#no explorer
+		"BTX": get_btx, 			#Bitcore					#working
+		"CDY": get_cdy, 			#Bitcoin Candy (for of BCH)	#working
+		"LBTC": get_lbtc,			#Lightning Bitcoin			#manual
+		"SUPERBTC": get_superbtc, 	#Super Bitcoin				#manual
 	}
 	parser = argparse.ArgumentParser()
 	parser.add_argument("--address", help="query a single address")
@@ -60,7 +60,9 @@ def main():
 				forklist = {forkname:forkfunction}
 	else:
 		forklist = available_forks
-
+		
+	if len(forklist) == 0:
+		sys.exit("no forks to check")
 	if args.timeout:
 		timeout = args.timeout
 	else:
