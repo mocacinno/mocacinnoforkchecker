@@ -6,12 +6,15 @@ import time
 
 def main():
 	available_forks = {
-		"B2X": get_b2x, 
-		"BCH": get_bch, 
-		"BCX" : get_bcx
-		"BTG": get_btg, 
-		"BTX": get_btx, 
-		"LBTC": get_lbtc,
+		"B2X": get_b2x, 	#Bitcoin Segwit2X
+		"BCH": get_bch, 	#Bitcoin Cash
+		"BCX" : get_bcx, 	#BitcoinX
+		"BPA" : get_bpa, 	#Bitcoin Pizza
+		"BTG": get_btf, 	#Bitcoin Faith
+		"BTG": get_btg, 	#bitcoin gold
+		"BTW": get_btw, 	#Bitcoin World
+		"BTX": get_btx, 	#Bitcore
+		"LBTC": get_lbtc,	#Lightning Bitcoin
 		"SUPERBTC": get_superbtc, 
 	}
 	parser = argparse.ArgumentParser()
@@ -75,7 +78,32 @@ def main():
 		print "***********"
 	for success in successes:
 		print success
+		
+def get_bpa(address):
+	try:
+		decoded = base58.b58decode_check(address)
+		decoded = bytearray(decoded)
+		decoded[0] = 55
+		address_bpa = base58.b58encode_check(bytes(decoded))
+		print "\t address " + address + " was converted to BPA address " + address_bpa	
+		r = requests.get('http://47.100.55.227/ext/getbalance/%s' % address_bpa)
+		balance = r.text
+		if balance.isnumeric():
+			return balance
+		else :
+			print "\tsomething went wrong while checking " + str(address) + " on the BPA chain"
+			return 0
+	except:
+		print "\tsomething went wrong while checking " + str(address) + " on the BPA chain"
+		return 0
 
+def get_btw(address):
+	#BTF 73
+	print "\tdidn't find a single explorer for bitcoin world (btw)"
+	
+def get_btf(address):
+	#BTF 36
+	print "\tdidn't find a single explorer for bitcoin faith (btf)"
 		
 def get_bcx(address):
 	try:
