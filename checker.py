@@ -7,13 +7,16 @@ import time
 def main():
 	available_forks = {
 		"B2X": get_b2x, 	#Bitcoin Segwit2X
+		"BCA": get_bca, 	#Bitcoin Atom
 		"BCH": get_bch, 	#Bitcoin Cash
+		"BCI": get_bci, 	#Bitcoin Intrest
 		"BCX" : get_bcx, 	#BitcoinX
 		"BPA" : get_bpa, 	#Bitcoin Pizza
-		"BTG": get_btf, 	#Bitcoin Faith
+		"BTF": get_btf, 	#Bitcoin Faith
 		"BTG": get_btg, 	#Bitcoin Gold
 		"BTH": get_bth,		#Bitcoin Hot
 		"BTP": get_btp,		#Bitcoin Pay
+		"BTSQ": get_btsq,	#Bitcoin Community
 		"BTW": get_btw, 	#Bitcoin World
 		"BTX": get_btx, 	#Bitcore
 		"CDY": get_cdy, 	#Bitcoin Candy (for of BCH)
@@ -82,6 +85,35 @@ def main():
 	for success in successes:
 		print success
 
+		
+		
+def get_bci(address):
+	try:
+		decoded = base58.b58decode_check(address)
+		decoded = bytearray(decoded)
+		decoded[0] = 102
+		address_bci = base58.b58encode_check(bytes(decoded))
+		print "\t address " + address + " was converted to BCI address " + address_bci	
+		r = requests.get('https://explorer.bitcoininterest.io/api/addr/%s/?noTxList=1' % address_bci)
+		if r.text != 'Invalid address: Address has mismatched network type.. Code:1':
+			balance = r.json()['balance']
+			return balance
+		else :
+			print "\tsomething went wrong while checking " + str(address) + " on the BCI chain"
+			return 0
+	except:
+		print "\tsomething went wrong while checking " + str(address) + " on the BCI chain"
+		return 0		
+		
+		
+def get_bca(address):
+	#BCA 23
+	print "\tno explorer with an api found, check manually on https://bitcoinatom.net/"
+		
+def get_btsq(address):
+	#BTW 63
+	print "\tdidn't find a single explorer for bitcoin community (btsq)"
+		
 def get_cdy(address):
 	try:
 		decoded = base58.b58decode_check(address)
