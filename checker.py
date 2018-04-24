@@ -11,9 +11,12 @@ def main():
 		"BCX" : get_bcx, 	#BitcoinX
 		"BPA" : get_bpa, 	#Bitcoin Pizza
 		"BTG": get_btf, 	#Bitcoin Faith
-		"BTG": get_btg, 	#bitcoin gold
+		"BTG": get_btg, 	#Bitcoin Gold
+		"BTH": get_bth,		#Bitcoin Hot
+		"BTP": get_btp,		#Bitcoin Pay
 		"BTW": get_btw, 	#Bitcoin World
 		"BTX": get_btx, 	#Bitcore
+		"CDY": get_cdy, 	#Bitcoin Candy (for of BCH)
 		"LBTC": get_lbtc,	#Lightning Bitcoin
 		"SUPERBTC": get_superbtc, 
 	}
@@ -78,7 +81,33 @@ def main():
 		print "***********"
 	for success in successes:
 		print success
+
+def get_cdy(address):
+	try:
+		decoded = base58.b58decode_check(address)
+		decoded = bytearray(decoded)
+		decoded[0] = 0x1c
+		address_cdy = base58.b58encode_check(bytes(decoded))
+		print "\t address " + address + " was converted to CDY address " + address_cdy	
+		r = requests.get('http://block.cdy.one/insight-api/addr/%s/?noTxList=1' % address_cdy)
+		if r.text != 'Invalid address: Address has mismatched network type.. Code:1':
+			balance = r.json()['balance']
+			return balance
+		else :
+			print "\tsomething went wrong while checking " + str(address) + " on the CDY chain"
+			return 0
+	except:
+		print "\tsomething went wrong while checking " + str(address) + " on the CDY chain"
+		return 0
 		
+def get_bth(address):
+	#BTW 40
+	print "\tdidn't find a single explorer for bitcoin hot (bth)"
+
+def get_btp(address):
+	#BTW 0x38
+	print "\tdidn't find a single explorer for bitcoin pay (btp)"
+
 def get_bpa(address):
 	try:
 		decoded = base58.b58decode_check(address)
@@ -98,7 +127,7 @@ def get_bpa(address):
 		return 0
 
 def get_btw(address):
-	#BTF 73
+	#BTW 73
 	print "\tdidn't find a single explorer for bitcoin world (btw)"
 	
 def get_btf(address):
