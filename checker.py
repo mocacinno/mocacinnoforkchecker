@@ -5,7 +5,7 @@ import base58
 import time
 
 def main():
-	available_forks = {"BCH": get_bch, "BTG": get_btg, "BTX": get_btx}
+	available_forks = {"BCH": get_bch, "BTG": get_btg, "BTX": get_btx, "SUPERBTC": get_superbtc}
 	parser = argparse.ArgumentParser()
 	parser.add_argument("--address", help="query a single address")
 	parser.add_argument("--addressfile", help="query all addresses in this file")
@@ -22,6 +22,7 @@ def main():
 
 	addresslist = []
 	forklist = []
+	successes = []
 	if args.address:
 		addresslist.append(args.address)
 	if args.addressfile:
@@ -45,11 +46,22 @@ def main():
 		
 	for testaddress in addresslist:
 		for testfork in forklist:
+			print "testing " + testaddress + " on " + testfork
 			func = forklist.get(testfork, lambda: "Wrong fork")
 			balance = func(testaddress)
 			if balance > 0:
-				print testaddress + " has a balance of " + str(balance) + " on " + testfork
-		time.sleep(timeout)	
+				successes.append(testaddress + " has a balance of " + str(balance) + " on " + testfork)
+			time.sleep(timeout)
+	if len(successes) > 0:
+		print
+		print
+		print "found unspent outputs on one or more chains!!!"
+		print "claim at your own risk!"
+		print
+		print "successlist"
+		print "***********"
+	for success in successes:
+		print success
 	
 def get_bch(address):
 	try:
@@ -59,7 +71,7 @@ def get_bch(address):
 			return 0
 		return balance
 	except:
-		print "something went wrong while checking " + str(address) + " on the BCH chain"
+		print "\tsomething went wrong while checking " + str(address) + " on the BCH chain"
 		return 0
 			
 def get_btx(address):
@@ -69,22 +81,37 @@ def get_btx(address):
 			return 0
 		return r.text
 	except:
-		print "something went wrong while checking " + str(address) + " on the BTX chain"
+		print "\tsomething went wrong while checking " + str(address) + " on the BTX chain"
 		return 0
-			
+
+def get_superbtc(address):
+	#try:
+	#	r = requests.get('http://block.superbtc.org/insight-api/addr/%s/?noTxList=1' % address)
+	#	balance = r.json()['balance']
+	#	if balance == 0:
+	#		return 0
+	#	return balance
+	#except:
+	#	print "something went wrong while checking " + str(address) + " on the SUPERBTC chain"
+	#	return 0
+	print "\tSUPERBTC api down, check manually at block.superbtc.org"
+		
+		
+		
 def get_btg(address):
 	try:
 		decoded = base58.b58decode_check(address)
 		decoded = bytearray(decoded)
 		decoded[0] = 38
 		address_btg = base58.b58encode_check(bytes(decoded))
+		print "\t address " + address + " was converted to BTG address " + address_btg
 		r = requests.get('https://btgexplorer.com/api/addr/%s/?noTxList=1' % address_btg)
 		balance = r.json()['balance']
 		if balance == 0:
 			return 0
 		return balance
 	except:
-		print "something went wrong while checking " + str(address) + " on the BTG chain"
+		print "\tsomething went wrong while checking " + str(address) + " on the BTG chain"
 		return 0
 
 if __name__ == '__main__':
