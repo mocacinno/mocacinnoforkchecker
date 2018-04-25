@@ -18,6 +18,7 @@ def main():
 		"BICC" : get_bicc,				#BitClassic					#working
 		"BITCOINMINOR" : get_bitcoinminor,	#Bitcoin Minor			#no explorer
 		"BPA" : get_bpa, 				#Bitcoin Pizza				#working
+		"BTA" : get_bta,				#Bitcoin All				#no explorer
 		"BTC" : get_btc,				#Bitcoin					#working
 		"BTCP" : get_btcp,				#Bitcoin platinum			#no explorer
 		"BTF": get_btf, 				#Bitcoin Faith				#no explorer
@@ -234,6 +235,9 @@ def get_bitcoinminor(address):
 
 def get_btp(address):
 	print "\tdidn't find a single explorer for bitcoin pay (btp) (prefix 0x38)"
+	
+def get_bta(address):
+	print "\tdidn't find a single explorer for bitcoin all (bta)"
 
 def get_bpa(address):
 	chain = "BPA"
