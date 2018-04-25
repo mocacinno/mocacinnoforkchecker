@@ -16,6 +16,7 @@ def main():
 		"BCHC": get_bchc, 				#Bitcoin Clashic			#working
 		"BCI": get_bci, 				#Bitcoin Intrest			#working
 		"BCK": get_bck, 				#Bitcoin King				#no explorer
+		"BCP": get_bcp, 				#Bitcoin Cash Plus			#working
 		"BCW": get_bcw, 				#Bitcoin Wonder				#no explorer
 		"BCX" : get_bcx, 				#BitcoinX					#working
 		"BEC" : get_bec, 				#Bitcoin ECO				#no explorer
@@ -42,6 +43,7 @@ def main():
 		"GOD": get_god, 				#Bitcoin God				#no explorer
 		"LBTC": get_lbtc,				#Lightning Bitcoin			#manual
 		"OBTC": get_obtc,				#Oil Bitcoin				#no explorer
+		"NBTC": get_nbtc,				#New Bitcoin				#no explorer
 		"QBTC": get_qbtc,				#Quantum Bitcoin			#no explorer
 		"SUPERBTC": get_superbtc, 		#Super Bitcoin				#working
 		"WBTC": get_wbtc, 				#World Bitcoin				#working
@@ -254,6 +256,11 @@ def get_btt(address):
 		print "\tdidn't find a single explorer for bitcoin top (btt)"
 	return -1
 	
+def get_nbtc(address):
+	if verbose:
+		print "\tdidn't find a single explorer for new bitcoin (nbtc)"
+	return -1
+	
 def get_fbtc(address):
 	if verbose:
 		print "\tdidn't find a single explorer for bitcoin fast (fbtc)"
@@ -424,6 +431,13 @@ def get_superbtc(address):
 	if verbose:
 		print "\t checking address " + address + " on the " + chain + " chain"	
 	return frominsightapi(address, 'http://block.superbtc.org/insight-api/', chain)	
+
+def get_bcp(address):
+	chain = "BCP"
+	address = veranderprefix(address, 28)
+	if verbose:
+		print "\t checking address " + address + " on the " + chain + " chain"	
+	return frominsightapi(address, 'http://www.bcpexp.org/api/', chain)	
 	
 def get_b2x(address):
 	chain = "B2X"
