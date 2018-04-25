@@ -14,13 +14,17 @@ def main():
 		"BCH": get_bch, 				#Bitcoin Cash				#working
 		"BCHC": get_bchc, 				#Bitcoin Clashic			#working
 		"BCI": get_bci, 				#Bitcoin Intrest			#working
+		"BCK": get_bck, 				#Bitcoin King				#no explorer
+		"BCW": get_bcw, 				#Bitcoin Wonder				#no explorer
 		"BCX" : get_bcx, 				#BitcoinX					#working
 		"BICC" : get_bicc,				#BitClassic					#working
 		"BITCOINMINOR" : get_bitcoinminor,	#Bitcoin Minor			#no explorer
+		"BNR" : get_bnr,				#Bitcoin Neuro				#no explorer
 		"BPA" : get_bpa, 				#Bitcoin Pizza				#working
 		"BTA" : get_bta,				#Bitcoin All				#no explorer
 		"BTC" : get_btc,				#Bitcoin					#working
 		"BTCP" : get_btcp,				#Bitcoin platinum			#no explorer
+		"BTCS" : get_btcs,				#Bitcoin Stake				#no explorer
 		"BTF": get_btf, 				#Bitcoin Faith				#no explorer
 		"BTG": get_btg, 				#Bitcoin Gold				#working
 		"BTH": get_bth,					#Bitcoin Hot				#no explorer
@@ -238,6 +242,9 @@ def get_btp(address):
 	
 def get_bta(address):
 	print "\tdidn't find a single explorer for bitcoin all (bta)"
+	
+def get_bnr(address):
+	print "\tdidn't find a single explorer for bitcoin neuro (bnr)"
 
 def get_bpa(address):
 	chain = "BPA"
@@ -258,6 +265,15 @@ def get_btf(address):
 
 def get_btcp(address):
 	print "\tdidn't find a single explorer for bitcoin platinum (btcp)"
+
+def get_btcs(address):
+	print "\tdidn't find a single explorer for bitcoin stake (btcs)"
+
+def get_bck(address):
+	print "\tdidn't find a single explorer for bitcoin king (bck)"
+
+def get_bcw(address):
+	print "\tdidn't find a single explorer for bitcoin wonder (bcw)"
 	
 def get_bcx(address):
 	chain = "BCX"
