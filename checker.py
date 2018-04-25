@@ -18,6 +18,9 @@ def main():
 		"BCHC": get_bchc, 				#Bitcoin Clashic			#working
 		"BCI": get_bci, 				#Bitcoin Intrest			#working
 		"BCK": get_bck, 				#Bitcoin King				#no explorer
+		"BCL": get_bcl, 				#Bitcoin Lunar				#no explorer
+		"BCL2": get_bcl2, 				#Bitcoin Classic			#no explorer
+		"BCM": get_bcm, 				#Bitcoin Master				#no explorer
 		"BCO": get_bco, 				#Bitcoin Ore				#no explorer
 		"BCP": get_bcp, 				#Bitcoin Cash Plus			#working
 		"BCPC": get_bcpc, 				#Bitcoin Cash Plus			#no explorer
@@ -35,9 +38,11 @@ def main():
 		"BTC" : get_btc,				#Bitcoin					#working
 		"BTC2" : get_btc2,				#Bitcoin 2					#no explorer
 		"BTCH" : get_btch,				#Bitcoin Hush				#should be fixable if src is released
+		"BTCM" : get_btcm,				#Bitcoin Metal				#no explorer
 		"BTCP" : get_btcp,				#Bitcoin platinum			#no explorer
-		"BTCP2" : get_btcp2,				#Bitcoin Private			#no explorer
+		"BTCP2" : get_btcp2,			#Bitcoin Private			#no explorer
 		"BTCS" : get_btcs,				#Bitcoin Stake				#no explorer
+		"BTCTI" : get_btcti				#BitcoinTI  				#no explorer
 		"BTCV" : get_btcv,				#Bitcoin Blvck				#no explorer
 		"BTD" : get_btd,				#Bitcoin Dollar				#no explorer
 		"BTF": get_btf, 				#Bitcoin Faith				#no explorer
@@ -176,7 +181,6 @@ def main():
 		print "BTG: GeeXaL3TKCjtdFS78oCrPsFBkEFt9fxuZF"
 
 ###############################################################################################	
-
 def veranderprefix(address, prefix):
 	try:
 		decoded = base58.b58decode_check(address)
@@ -188,6 +192,9 @@ def veranderprefix(address, prefix):
 		print "[ERR] could not convert address " + address + " using prefix " + prefix
 		return address
 
+def fromabe(address, baseurl, chain):
+	#http://www.khashier.com/q/addressbalance/ADDRESS
+		
 def frominsightapi(address, baseurl, chain):
 	stderror = "\t something went wrong while querying the api for address " + address + " on the " + chain + " chain, using the insight api on " + baseurl
 	try:
@@ -269,6 +276,31 @@ def get_btt(address):
 	if verbose:
 		print "\tdidn't find a single explorer for bitcoin top (btt)"
 	return -1
+	
+def get_bcl2(address):
+	if verbose:
+		print "\tdidn't find a single explorer for bitcoin classic (bcl)"
+	return -1
+	
+def get_btcm(address):
+	if verbose:
+		print "\tdidn't find a single explorer for bitcoin metal (btcm)"
+	return -1
+	
+def get_bcl(address):
+	if verbose:
+		print "\tdidn't find a single explorer for bitcoin lunar (bcl)"
+	return -1
+	
+def get_bcm(address):
+	if verbose:
+		print "\tdidn't find a single explorer for bitcoin master (bcm)"
+	return -1
+	
+def get_btcti(address):
+	if verbose:
+		print "\tdidn't find a single explorer for bitcointi (btcti)"
+	return -1	
 	
 def get_bcs2(address):
 	if verbose:
