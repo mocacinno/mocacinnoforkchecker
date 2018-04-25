@@ -20,6 +20,7 @@ def main():
 		"BCX" : get_bcx, 				#BitcoinX					#working
 		"BEC" : get_bec, 				#Bitcoin ECO				#no explorer
 		"BICC" : get_bicc,				#BitClassic					#working
+		"BIFI" : get_bifi,				#Bitcoin File				#no explorer
 		"BITCOINMINOR" : get_bitcoinminor,	#Bitcoin Minor			#no explorer
 		"BNR" : get_bnr,				#Bitcoin Neuro				#no explorer
 		"BPA" : get_bpa, 				#Bitcoin Pizza				#working
@@ -37,10 +38,13 @@ def main():
 		"BTW": get_btw, 				#Bitcoin World				#no explorer
 		"BTX": get_btx, 				#Bitcore					#working
 		"CDY": get_cdy, 				#Bitcoin Candy (for of BCH)	#working
+		"FBTC": get_fbtc, 				#Bitcoin Fast				#no explorer
+		"GOD": get_god, 				#Bitcoin God				#no explorer
 		"LBTC": get_lbtc,				#Lightning Bitcoin			#manual
 		"OBTC": get_obtc,				#Oil Bitcoin				#no explorer
 		"QBTC": get_qbtc,				#Quantum Bitcoin			#no explorer
 		"SUPERBTC": get_superbtc, 		#Super Bitcoin				#working
+		"WBTC": get_wbtc, 				#World Bitcoin				#working
 	}
 	parser = argparse.ArgumentParser()
 	parser.add_argument("--address", help="query a single address")
@@ -114,7 +118,8 @@ def main():
 			if balance > 0:
 				successes.append(testaddress + " has a balance of " + str(balance) + " on " + testfork)
 			time.sleep(timeout)
-	pbar.close()
+	if not verbose:
+		pbar.close()
 	if len(failed) > 0:
 		print
 		print "failed tests (usually because the api was down, or because the address wasnt found on the explorer)"
@@ -248,6 +253,21 @@ def get_btt(address):
 	if verbose:
 		print "\tdidn't find a single explorer for bitcoin top (btt)"
 	return -1
+	
+def get_fbtc(address):
+	if verbose:
+		print "\tdidn't find a single explorer for bitcoin fast (fbtc)"
+	return -1
+
+def get_god(address):
+	if verbose:
+		print "\tdidn't find a single explorer for bitcoin god (god)"
+	return -1
+
+def get_bifi(address):
+	if verbose:
+		print "\tdidn't find a single explorer for bitcoin file (bifi)"
+	return -1
 
 def get_bchc(address):
 	chain = "BCHC"
@@ -337,6 +357,13 @@ def get_bpa(address):
 	if verbose:
 		print "\t checking address " + address + " on the " + chain + " chain"	
 	return fromiquidus(address, 'http://47.100.55.227/ext/', chain)
+	
+def get_wbtc(address):
+	chain = "WBTC"
+	address = veranderprefix(address, 73)
+	if verbose:
+		print "\t checking address " + address + " on the " + chain + " chain"
+	return fromiquidus(address, 'http://142.44.242.32:3001/ext/', chain)
 
 def get_bicc(address):
 	chain = "BICC"
