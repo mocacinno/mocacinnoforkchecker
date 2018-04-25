@@ -5,6 +5,7 @@ import base58
 import time
 import urllib3
 import json
+from tqdm import *
 
 def main():
 	available_forks = {
@@ -17,6 +18,7 @@ def main():
 		"BCK": get_bck, 				#Bitcoin King				#no explorer
 		"BCW": get_bcw, 				#Bitcoin Wonder				#no explorer
 		"BCX" : get_bcx, 				#BitcoinX					#working
+		"BEC" : get_bec, 				#Bitcoin ECO				#no explorer
 		"BICC" : get_bicc,				#BitClassic					#working
 		"BITCOINMINOR" : get_bitcoinminor,	#Bitcoin Minor			#no explorer
 		"BNR" : get_bnr,				#Bitcoin Neuro				#no explorer
@@ -28,13 +30,16 @@ def main():
 		"BTF": get_btf, 				#Bitcoin Faith				#no explorer
 		"BTG": get_btg, 				#Bitcoin Gold				#working
 		"BTH": get_bth,					#Bitcoin Hot				#no explorer
+		"BTN": get_btn,					#Bitcoin New				#no explorer
 		"BTP": get_btp,					#Bitcoin Pay				#no explorer
 		"BTSQ": get_btsq,				#Bitcoin Community			#no explorer
+		"BTT": get_btt,					#Bitcoin Top				#no explorer
 		"BTW": get_btw, 				#Bitcoin World				#no explorer
 		"BTX": get_btx, 				#Bitcore					#working
 		"CDY": get_cdy, 				#Bitcoin Candy (for of BCH)	#working
 		"LBTC": get_lbtc,				#Lightning Bitcoin			#manual
 		"OBTC": get_obtc,				#Oil Bitcoin				#no explorer
+		"QBTC": get_qbtc,				#Quantum Bitcoin			#no explorer
 		"SUPERBTC": get_superbtc, 		#Super Bitcoin				#working
 	}
 	parser = argparse.ArgumentParser()
@@ -42,9 +47,15 @@ def main():
 	parser.add_argument("--addressfile", help="query all addresses in this file")
 	parser.add_argument("--fork", help="query a single fork")
 	parser.add_argument("--showforks", help="show all forks" , action='store_true')
+	parser.add_argument("--verbose", help="show all tests while they are running" , action='store_true')
 	parser.add_argument("--outfile", help="output to this file instead of stdout (screen)")
 	parser.add_argument("--timeout", help="number of seconds to wait between 2 requests", nargs='?', const=2, type=int)
 	args = parser.parse_args()
+	global verbose
+	if args.verbose:
+		verbose = 1
+	else:
+		verbose = 0
 	if args.outfile:
 		sys.stdout = open(args.outfile, 'w')
 
@@ -58,6 +69,8 @@ def main():
 	addresslist = []
 	forklist = []
 	successes = []
+	untested = []
+	failed = []
 	if args.address:
 		addresslist.append(args.address)
 	if args.addressfile:
@@ -80,16 +93,43 @@ def main():
 		timeout = args.timeout
 	else:
 		timeout = 2
-		
+	
+	if not verbose:
+		numberaddresses = len(addresslist)
+		numberforks = len(forklist)
+		product = numberaddresses * numberforks
+		pbar = tqdm(total=product, unit='forks', ascii=True)
 	for testaddress in addresslist:
 		for testfork in forklist:
-			print "testing " + testaddress + " on " + testfork
+			if verbose:
+				print "testing " + testaddress + " on " + testfork
+			if not verbose:
+				pbar.update(1)
 			func = forklist.get(testfork, lambda: "Wrong fork")
 			balance = func(testaddress)
+			if balance == -1:
+				untested.append("for some reason, address " + testaddress + " was not tested on " + testfork)
+			if balance == -2:
+				failed.append("for some reason, address " + testaddress + " failed to be tested on " + testfork)
 			if balance > 0:
 				successes.append(testaddress + " has a balance of " + str(balance) + " on " + testfork)
 			time.sleep(timeout)
+	pbar.close()
+	if len(failed) > 0:
+		print
+		print "failed tests (usually because the api was down, or because the address wasnt found on the explorer)"
+		print "************"
+		for fail in failed:
+			print fail
+	if len(untested) > 0:
+		print
+		print "untested (usually because the coin was DOA, dead, dying or to new... Sometimes because the only block explorer didnt have an api)"
+		print "************"
+		for untest in untested:
+			print untest
 	if len(successes) > 0:
+		print
+		print
 		print
 		print "**************************************************"
 		print "* found unspent outputs on one or more chains!!! *"
@@ -124,7 +164,8 @@ def veranderprefix(address, prefix):
 		newaddress = base58.b58encode_check(bytes(decoded))
 		return newaddress
 	except:
-		print "could not convert address " + address + " using prefix " + prefix 
+		print "[ERR] could not convert address " + address + " using prefix " + prefix
+		return address
 
 def frominsightapi(address, baseurl, chain):
 	stderror = "\t something went wrong while querying the api for address " + address + " on the " + chain + " chain, using the insight api on " + baseurl
@@ -133,17 +174,20 @@ def frominsightapi(address, baseurl, chain):
 		if r.text != 'Invalid address: Address has mismatched network type.. Code:1':
 			balance = r.json()['balance']
 			try:
-			   val = float(balance)
-			   return val
+				val = float(balance)
+				return val
 			except ValueError:
-			   print stderror
-			   return 0
+				if verbose:
+					print stderror
+				return -2
 		else :
-			print stderror
-			return 0
+			if verbose:
+				print stderror
+			return -2
 	except:
-		print stderror
-		return 0
+		if verbose:
+			print stderror
+		return -2
 		
 def frominsightapi_urllib3(address, baseurl, chain):
 	#only use this one if incorrect depreciation warnings are shown when using the fromsightapi function
@@ -154,14 +198,16 @@ def frominsightapi_urllib3(address, baseurl, chain):
 		r = http.request('get', baseurl + 'addr/%s/?noTxList=1' % address)
 		balance = json.loads(r.data)['balance']
 		try:
-		   val = float(balance)
-		   return val
+			val = float(balance)
+			return val
 		except ValueError:
-		   print stderror
-		   return 0
+			if verbose:
+				print stderror
+			return -2
 	except:
-		print stderror
-		return 0
+		if verbose:
+			print stderror
+		return -2
 
 def fromchainz(address, baseurl, chain):
 	try:
@@ -171,11 +217,13 @@ def fromchainz(address, baseurl, chain):
 			val = float(r.text)
 			return val
 		except ValueError:
-			print stderror
-			return 0
+			if verbose:
+				print stderror
+			return -2
 	except:
-		print stderror
-		return 0
+		if verbose:
+			print stderror
+		return -2
 		
 def fromiquidus(address, baseurl, chain):
 	try:
@@ -186,127 +234,191 @@ def fromiquidus(address, baseurl, chain):
 			return val
 		except ValueError:
 			if json.loads(r.text)['error'] == "address not found.":
-				return 0
-			print stderror + " 1"
-			return 0
+				return -2
+			if verbose:
+				print stderror + " 1"
+			return -2
 	except:
-		print stderror + " 2"
-		return 0
+		if verbose:
+			print stderror + " 2"
+		return -2
 		
 ###############################################################################################
+def get_btt(address):
+	if verbose:
+		print "\tdidn't find a single explorer for bitcoin top (btt)"
+	return -1
 
 def get_bchc(address):
 	chain = "BCHC"
-	print "\t checking address " + address + " on the " + chain + " chain"	
+	if verbose:
+		print "\t checking address " + address + " on the " + chain + " chain"	
 	return frominsightapi_urllib3(address, 'https://truevisionofsatoshi.com/api/', chain)	
 	
 def get_btc(address):	
 	chain = "BTC"
-	print "\t checking address " + address + " on the " + chain + " chain"	
+	if verbose:
+		print "\t checking address " + address + " on the " + chain + " chain"	
 	return fromchainz(address, 'https://chainz.cryptoid.info/btc/', chain)		
 		
 def get_bci(address):
 	chain = "BCI"
 	address = veranderprefix(address, 102)
-	print "\t checking address " + address + " on the " + chain + " chain"	
+	if verbose:
+		print "\t checking address " + address + " on the " + chain + " chain"	
 	return frominsightapi(address, 'https://explorer.bitcoininterest.io/api/', chain)	
 	
 def get_btx(address):	
 	chain = "BCX"
-	print "\t checking address " + address + " on the " + chain + " chain"	
+	if verbose:
+		print "\t checking address " + address + " on the " + chain + " chain"	
 	return fromchainz(address, 'https://chainz.cryptoid.info/btx/', chain)	
 			
 def get_bca(address):
-	print "\tno explorer with an api found, check manually on https://bitcoinatom.net/ (prefix 23)"
+	if verbose:
+		print "\tno explorer with an api found, check manually on https://bitcoinatom.net/ (prefix 23)"
+	return -1
 		
 def get_btsq(address):
-	print "\tdidn't find a single explorer for bitcoin community (btsq) (prefix 63)"
-	
+	if verbose:
+		print "\tdidn't find a single explorer for bitcoin community (btsq) (prefix 63)"
+	return -1
+
 def get_obtc(address):
-	print "\tdidn't find a single explorer for oil bitcoin (obtc)"
+	if verbose:
+		print "\tdidn't find a single explorer for oil bitcoin (obtc)"
+	return -1
+	
+def get_qbtc(address):
+	if verbose:
+		print "\tdidn't find a single explorer for quantum bitcoin (qbtc)"	
+	return -1
+
+def get_btn(address):
+	if verbose:
+		print "\tdidn't find a single explorer for bitcoin new (btn)"	
+	return -1
 	
 def get_cdy(address):
 	chain = "CDY"
 	address = veranderprefix(address, 0x1c)
-	print "\t checking address " + address + " on the " + chain + " chain"	
+	if verbose:
+		print "\t checking address " + address + " on the " + chain + " chain"	
 	return frominsightapi(address, 'http://block.cdy.one/insight-api/', chain)	
 		
 def get_bth(address):
-	print "\tdidn't find a single explorer for bitcoin hot (bth) (prefix 40)"
+	if verbose:
+		print "\tdidn't find a single explorer for bitcoin hot (bth) (prefix 40)"
+	return -1
 	
 def get_bitcoinminor(address):
-	print "\tdidn't find a single explorer for bitcoin minor (bitcoinminor)"
+	if verbose:
+		print "\tdidn't find a single explorer for bitcoin minor (bitcoinminor)"
+	return -1
 
 def get_btp(address):
-	print "\tdidn't find a single explorer for bitcoin pay (btp) (prefix 0x38)"
+	if verbose:
+		print "\tdidn't find a single explorer for bitcoin pay (btp) (prefix 0x38)"
+	return -1
 	
 def get_bta(address):
-	print "\tdidn't find a single explorer for bitcoin all (bta)"
+	if verbose:
+		print "\tdidn't find a single explorer for bitcoin all (bta)"
+	return -1
 	
 def get_bnr(address):
-	print "\tdidn't find a single explorer for bitcoin neuro (bnr)"
+	if verbose:
+		print "\tdidn't find a single explorer for bitcoin neuro (bnr)"
+	return -1
 
 def get_bpa(address):
 	chain = "BPA"
 	address = veranderprefix(address, 55)
-	print "\t checking address " + address + " on the " + chain + " chain"	
+	if verbose:
+		print "\t checking address " + address + " on the " + chain + " chain"	
 	return fromiquidus(address, 'http://47.100.55.227/ext/', chain)
 
 def get_bicc(address):
 	chain = "BICC"
-	print "\t checking address " + address + " on the " + chain + " chain"	
+	if verbose:
+		print "\t checking address " + address + " on the " + chain + " chain"	
 	return fromiquidus(address, 'http://18.216.251.169/ext/', chain)
 
 def get_btw(address):
-	print "\tdidn't find a single explorer for bitcoin world (btw) (prefix 73)"
+	if verbose:
+		print "\tdidn't find a single explorer for bitcoin world (btw) (prefix 73)"
+	return -1
 	
 def get_btf(address):
-	print "\tdidn't find a single explorer for bitcoin faith (btf) (prefix 36)"
+	if verbose:
+		print "\tdidn't find a single explorer for bitcoin faith (btf) (prefix 36)"
+	return -1
 
 def get_btcp(address):
-	print "\tdidn't find a single explorer for bitcoin platinum (btcp)"
+	if verbose:
+		print "\tdidn't find a single explorer for bitcoin platinum (btcp)"
+	return -1
 
 def get_btcs(address):
-	print "\tdidn't find a single explorer for bitcoin stake (btcs)"
+	if verbose:
+		print "\tdidn't find a single explorer for bitcoin stake (btcs)"
+	return -1
 
 def get_bck(address):
-	print "\tdidn't find a single explorer for bitcoin king (bck)"
+	if verbose:
+		print "\tdidn't find a single explorer for bitcoin king (bck)"
+	return -1
 
 def get_bcw(address):
-	print "\tdidn't find a single explorer for bitcoin wonder (bcw)"
+	if verbose:
+		print "\tdidn't find a single explorer for bitcoin wonder (bcw)"
+	return -1
+
+def get_bec(address):
+	if verbose:
+		print "\tdidn't find a single explorer for bitcoin eco (bec)"
+	return -1
 	
 def get_bcx(address):
 	chain = "BCX"
 	address = veranderprefix(address, 75)
-	print "\t checking address " + address + " on the " + chain + " chain"	
+	if verbose:
+		print "\t checking address " + address + " on the " + chain + " chain"	
 	return frominsightapi(address, 'https://bcx.info/insight-api/', chain)	
 	
 def get_bch(address):
 	chain = "BCH"
-	print "\t checking address " + address + " on the " + chain + " chain"	
+	if verbose:
+		print "\t checking address " + address + " on the " + chain + " chain"	
 	return frominsightapi(address, 'https://bitcoincash.blockexplorer.com/api/', chain)	
 				
 def get_superbtc(address):
 	chain = "SUPERBTC"
-	print "\t checking address " + address + " on the " + chain + " chain"	
+	if verbose:
+		print "\t checking address " + address + " on the " + chain + " chain"	
 	return frominsightapi(address, 'http://block.superbtc.org/insight-api/', chain)	
-	print "\tSUPERBTC api down, check manually at block.superbtc.org"
 	
 def get_b2x(address):
 	chain = "B2X"
-	print "\t checking address " + address + " on the " + chain + " chain"	
+	if verbose:
+		print "\t checking address " + address + " on the " + chain + " chain"	
 	return frominsightapi(address, 'https://explorer.b2x-segwit.io/b2x-insight-api/', chain)	
 	
 def get_lbtc(address):
-	print "\tLBTC api down, check manually at explorer.lbtc.io"
+	if verbose:
+		print "\tLBTC api down, check manually at explorer.lbtc.io"
+	return -1
 
 def get_bcd(address):
-	print "\tLBTC api down, check manually at explorer.btcd.io"
+	if verbose:
+		print "\tLBTC api down, check manually at explorer.btcd.io"
+	return -1
 	
 def get_btg(address):
 	chain = "BTG"
 	address = veranderprefix(address, 38)
-	print "\t checking address " + address + " on the " + chain + " chain"	
+	if verbose:
+		print "\t checking address " + address + " on the " + chain + " chain"	
 	return frominsightapi(address, 'https://btgexplorer.com/api/', chain)	
 
 ###############################################################################################	
