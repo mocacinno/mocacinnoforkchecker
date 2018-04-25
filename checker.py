@@ -45,7 +45,7 @@ def main():
 		"BTCP" : get_btcp,				#Bitcoin platinum			#no explorer
 		"BTCP2" : get_btcp2,			#Bitcoin Private			#no explorer
 		"BTCS" : get_btcs,				#Bitcoin Stake				#no explorer
-		"BTCTI" : get_btcti				#BitcoinTI  				#no explorer
+		"BTCTI" : get_btcti,				#BitcoinTI  				#no explorer
 		"BTCV" : get_btcv,				#Bitcoin Blvck				#no explorer
 		"BTD" : get_btd,				#Bitcoin Dollar				#no explorer
 		"BTF": get_btf, 				#Bitcoin Faith				#no explorer
@@ -285,7 +285,7 @@ def get_btcl(address):
 		print "\tdidn't find a single explorer for bitcoin lite (btcl)"
 	return -1
 	
-def get_bttr(address):
+def get_btr(address):
 	if verbose:
 		print "\tdidn't find a single explorer for bitcoin rhodium (btr)"
 	return -1
