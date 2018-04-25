@@ -210,7 +210,7 @@ def veranderprefix(address, prefix):
 		newaddress = base58.b58encode_check(bytes(decoded))
 		return newaddress
 	except:
-		print "[ERR] could not convert address " + address + " using prefix " + prefix
+		#print "[ERR] could not convert address " + str(address) + " using prefix " + str(prefix)
 		return address
 
 		
