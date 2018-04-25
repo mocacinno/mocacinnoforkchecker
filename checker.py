@@ -9,6 +9,7 @@ from tqdm import *
 
 def main():
 	available_forks = {
+		"ABTC": get_abtc, 				#A Bitcoin					#no explorer
 		"B2X": get_b2x, 				#Bitcoin Segwit2X			#working
 		"BBC": get_bbc, 				#Big Bitcoin				#no explorer
 		"BCA": get_bca, 				#Bitcoin Atom				#manual	
@@ -32,12 +33,14 @@ def main():
 		"BICC" : get_bicc,				#BitClassic					#working
 		"BIFI" : get_bifi,				#Bitcoin File				#no explorer
 		"BITCOINMINOR" : get_bitcoinminor,	#Bitcoin Minor			#no explorer
+		"BITE" : get_bite,				#BitEthereum				#no explorer
 		"BNR" : get_bnr,				#Bitcoin Neuro				#no explorer
 		"BPA" : get_bpa, 				#Bitcoin Pizza				#working
 		"BTA" : get_bta,				#Bitcoin All				#no explorer
 		"BTC" : get_btc,				#Bitcoin					#working
 		"BTC2" : get_btc2,				#Bitcoin 2					#no explorer
 		"BTCH" : get_btch,				#Bitcoin Hush				#should be fixable if src is released
+		"BTCL" : get_btcl,				#Bitcoin Lite				#no explorer
 		"BTCM" : get_btcm,				#Bitcoin Metal				#no explorer
 		"BTCP" : get_btcp,				#Bitcoin platinum			#no explorer
 		"BTCP2" : get_btcp2,			#Bitcoin Private			#no explorer
@@ -51,6 +54,7 @@ def main():
 		"BTN": get_btn,					#Bitcoin New				#no explorer
 		"BTP": get_btp,					#Bitcoin Pay				#no explorer
 		"BTP2": get_btp2,				#Bitcoin Pro				#manual
+		"BTR": get_btr,					#Bitcoin Rhodium			#no explorer
 		"BTSQ": get_btsq,				#Bitcoin Community			#no explorer
 		"BTT": get_btt,					#Bitcoin Top				#no explorer
 		"BTV": get_btv, 				#BitVote					#working
@@ -65,6 +69,7 @@ def main():
 		"NBTC": get_nbtc,				#New Bitcoin				#no explorer
 		"QBTC": get_qbtc,				#Quantum Bitcoin			#no explorer
 		"SUPERBTC": get_superbtc, 		#Super Bitcoin				#working
+		"UBTC": get_ubtc, 				#United Bitcoin				#manual
 		"WBTC": get_wbtc, 				#World Bitcoin				#working
 	}
 	parser = argparse.ArgumentParser()
@@ -192,8 +197,6 @@ def veranderprefix(address, prefix):
 		print "[ERR] could not convert address " + address + " using prefix " + prefix
 		return address
 
-def fromabe(address, baseurl, chain):
-	#http://www.khashier.com/q/addressbalance/ADDRESS
 		
 def frominsightapi(address, baseurl, chain):
 	stderror = "\t something went wrong while querying the api for address " + address + " on the " + chain + " chain, using the insight api on " + baseurl
@@ -275,6 +278,26 @@ def fromiquidus(address, baseurl, chain):
 def get_btt(address):
 	if verbose:
 		print "\tdidn't find a single explorer for bitcoin top (btt)"
+	return -1
+	
+def get_btcl(address):
+	if verbose:
+		print "\tdidn't find a single explorer for bitcoin lite (btcl)"
+	return -1
+	
+def get_bttr(address):
+	if verbose:
+		print "\tdidn't find a single explorer for bitcoin rhodium (btr)"
+	return -1
+	
+def get_bite(address):
+	if verbose:
+		print "\tdidn't find a single explorer for bitethereum (bite)"
+	return -1
+	
+def get_abtc(address):
+	if verbose:
+		print "\tdidn't find a single explorer for abitcoin (abtc)"
 	return -1
 	
 def get_bcl2(address):
@@ -430,6 +453,11 @@ def get_bca(address):
 def get_btp2(address):
 	if verbose:
 		print "\tno explorer with an api found, check manually on http://bitcoin-pool.de/explorer/BTP/ (prefix 23)"
+	return -1
+	
+def get_ubtc(address):
+	if verbose:
+		print "\tno explorer with an api found, check manually on https://www.ub.com/explorer"
 	return -1
 		
 def get_btsq(address):
