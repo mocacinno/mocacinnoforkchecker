@@ -26,6 +26,7 @@ https://github.com/mocacinno/bitcoin_fork_claimer/ => extra forks
 https://github.com/foozzi/bitcoin-fork-checker => basic idear  
 https://bitcointalk.org/index.php?topic=2749969.0 => extra forks  
 https://en.bitcoin.it/wiki/List_of_address_prefixes => nice overview of prefixes
+http://list.wiki/Bitcoin_Hard_Forks => extra forks
   
 version v0.1:  
 Initial working beta
