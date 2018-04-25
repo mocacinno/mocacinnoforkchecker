@@ -89,6 +89,7 @@ def main():
 	if args.outfile:
 		file = open(args.outfile, "w")
 		file.write("if you like this project, consider some of the \"free\" coins you got from these forks to me ;)\nBTC/BCH/BTX/B2X/...: 1MocACiWLM8bYn8pCrYjy6uHq4U3CkxLaa\nBTG: GeeXaL3TKCjtdFS78oCrPsFBkEFt9fxuZF\n\n")
+		file.close()
 	#	sys.stdout = open(args.outfile, 'w')
 
 	if args.showforks:
@@ -108,7 +109,10 @@ def main():
 	if args.addressfile:
 		with open(args.addressfile) as file:
 			for address in file:
-				addresslist.append(address.rstrip())
+				firstletter = address[:1]
+				secondletter = address[:2]
+				if firstletter == "1" or firstletter == "3" or firstletter == "b":
+					addresslist.append(address.rstrip())
 	if len(addresslist) == 0:
 		sys.exit("no addresses available")
 		
@@ -155,9 +159,13 @@ def main():
 		for fail in failed:
 			print fail
 		if args.outfile:
+			file = open(args.outfile, "a")
 			file.write("\nfailed tests (usually because the api was down, or because the address wasnt found on the explorer)\n************\n")
+			file.close()
 			for fail in failed:
+				file = open(args.outfile, "a")
 				file.write(fail + "\n") 
+				file.close()
 	if len(untested) > 0:
 		print
 		print "untested (usually because the coin was DOA, dead, dying or to new... Sometimes because the only block explorer didnt have an api)"
@@ -165,9 +173,13 @@ def main():
 		for untest in untested:
 			print untest
 		if args.outfile:
+			file = open(args.outfile, "a")
 			file.write("\nuntested (usually because the coin was DOA, dead, dying or to new... Sometimes because the only block explorer didnt have an api)\n************\n")
+			file.close()
 			for untest in untested:
+				file = open(args.outfile, "a")
 				file.write(untest + "\n") 
+				file.close()
 	if len(successes) > 0:
 		print
 		print
@@ -195,11 +207,16 @@ def main():
 		print "BTC/BCH/BTX/B2X/...: 1MocACiWLM8bYn8pCrYjy6uHq4U3CkxLaa"
 		print "BTG: GeeXaL3TKCjtdFS78oCrPsFBkEFt9fxuZF"
 		if args.outfile:
+			file = open(args.outfile, "a")
 			file.write("\n\n\n**************************************************\n* found unspent outputs on one or more chains!!! *\n* claim at your own risk!                        *\n**************************************************\n\nsuccesslist\n***********\n")
+			file.close()
 			for success in successes:
+				file = open(args.outfile, "a")
 				file.write(success + "\n") 
+				file.close()
+			file = open(args.outfile, "a")
 			file.write("\n\n-------------------------------------------------------------------------------------------\n| once again, if you import your private key into ANY unknown/untrusted wallet,           |\n| you risk losing your unspent outputs on all other chains!!!                             |\n| proceed with caution                                                                    |\n|*****************************************************************************************|\n| at least make sure your wallets on the most important chains are empty before importing |\n| their private keys into unknown wallets!!!                                              |\n-------------------------------------------------------------------------------------------\n\nif you like this project, consider some of the \"free\" coins you got from these forks to me ;)\nBTC/BCH/BTX/B2X/...: 1MocACiWLM8bYn8pCrYjy6uHq4U3CkxLaa\nBTG: GeeXaL3TKCjtdFS78oCrPsFBkEFt9fxuZF\n\n")
-	file.close()
+			file.close()
 
 ###############################################################################################	
 def veranderprefix(address, prefix):
@@ -385,6 +402,11 @@ def get_bcb(address):
 	if verbose:
 		print "\tdidn't find a single explorer for bitcoin boy (bcb)"
 	return -1
+	
+def get_btch(address):
+	if verbose:
+		print "\tdidn't find a single explorer for bitcoin hush (btch)"
+	return -1
 
 def get_bco(address):
 	if verbose:
@@ -434,20 +456,6 @@ def get_bci(address):
 	if verbose:
 		print "\t checking address " + address + " on the " + chain + " chain"	
 	return frominsightapi(address, 'https://explorer.bitcoininterest.io/api/', chain)	
-	
-def get_btch(address):
-	chain = "BTCH"
-	decoded = base58.b58decode_check(address)
-	decoded = bytearray(decoded)
-	decoded[0] = 127
-	#sourcecode isn't available yet, but decoded[1] should be between 192 and 202
-	decoded[1] = 192
-	#decoded[1] = 202
-	address = base58.b58encode_check(bytes(decoded))
-	if verbose:
-		print "\t checking address " + address + " on the " + chain + " chain"
-	return -1
-	return frominsightapi(address, 'http://explorer.btchush.org/api/', chain)
 	
 def get_btv(address):
 	chain = "BTV"
