@@ -10,6 +10,7 @@ from tqdm import *
 def main():
 	available_forks = {
 		"B2X": get_b2x, 				#Bitcoin Segwit2X			#working
+		"BBC": get_bbc, 				#Big Bitcoin				#no explorer
 		"BCA": get_bca, 				#Bitcoin Atom				#manual	
 		"BCB": get_bcb, 				#Bitcoin Boy				#no explorer
 		"BCD": get_bcd, 				#Bitcoin Diamond			#manual	
@@ -19,7 +20,9 @@ def main():
 		"BCK": get_bck, 				#Bitcoin King				#no explorer
 		"BCO": get_bco, 				#Bitcoin Ore				#no explorer
 		"BCP": get_bcp, 				#Bitcoin Cash Plus			#working
+		"BCPC": get_bcpc, 				#Bitcoin Cash Plus			#no explorer
 		"BCS": get_bcs, 				#Bitcoin Smart				#no explorer
+		"BCS2": get_bcs2, 				#Bitcoin Sudu				#no explorer
 		"BCW": get_bcw, 				#Bitcoin Wonder				#no explorer
 		"BCX" : get_bcx, 				#BitcoinX					#working
 		"BEC" : get_bec, 				#Bitcoin ECO				#no explorer
@@ -30,13 +33,19 @@ def main():
 		"BPA" : get_bpa, 				#Bitcoin Pizza				#working
 		"BTA" : get_bta,				#Bitcoin All				#no explorer
 		"BTC" : get_btc,				#Bitcoin					#working
+		"BTC2" : get_btc2,				#Bitcoin 2					#no explorer
+		"BTCH" : get_btch,				#Bitcoin Hush				#should be fixable if src is released
 		"BTCP" : get_btcp,				#Bitcoin platinum			#no explorer
+		"BTCP2" : get_btcp2,				#Bitcoin Private			#no explorer
 		"BTCS" : get_btcs,				#Bitcoin Stake				#no explorer
+		"BTCV" : get_btcv,				#Bitcoin Blvck				#no explorer
+		"BTD" : get_btd,				#Bitcoin Dollar				#no explorer
 		"BTF": get_btf, 				#Bitcoin Faith				#no explorer
 		"BTG": get_btg, 				#Bitcoin Gold				#working
 		"BTH": get_bth,					#Bitcoin Hot				#no explorer
 		"BTN": get_btn,					#Bitcoin New				#no explorer
 		"BTP": get_btp,					#Bitcoin Pay				#no explorer
+		"BTP2": get_btp2,				#Bitcoin Pro				#manual
 		"BTSQ": get_btsq,				#Bitcoin Community			#no explorer
 		"BTT": get_btt,					#Bitcoin Top				#no explorer
 		"BTV": get_btv, 				#BitVote					#working
@@ -261,6 +270,41 @@ def get_btt(address):
 		print "\tdidn't find a single explorer for bitcoin top (btt)"
 	return -1
 	
+def get_bcs2(address):
+	if verbose:
+		print "\tdidn't find a single explorer for bitcoin sudu (bcs)"
+	return -1
+	
+def get_btd(address):
+	if verbose:
+		print "\tdidn't find a single explorer for bitcoin dollar (btd)"
+	return -1	
+	
+def get_btcp2(address):
+	if verbose:
+		print "\tdidn't find a single explorer for bitcoin private (btcp)"
+	return -1
+	
+def get_bbc(address):
+	if verbose:
+		print "\tdidn't find a single explorer for big bitcoin (bbc)"
+	return -1
+
+def get_btc2(address):
+	if verbose:
+		print "\tdidn't find a single explorer for bitcoin 2 (btc2)"
+	return -1	
+	
+def get_btcv(address):
+	if verbose:
+		print "\tdidn't find a single explorer for bitcoin Blvck (btcv)"
+	return -1
+	
+def get_bcpc(address):
+	if verbose:
+		print "\tdidn't find a single explorer for bitcoin parallel (bcpc)"
+	return -1
+	
 def get_bcs(address):
 	if verbose:
 		print "\tdidn't find a single explorer for bitcoin smart (bcs)"
@@ -320,6 +364,20 @@ def get_bci(address):
 		print "\t checking address " + address + " on the " + chain + " chain"	
 	return frominsightapi(address, 'https://explorer.bitcoininterest.io/api/', chain)	
 	
+def get_btch(address):
+	chain = "BTCH"
+	decoded = base58.b58decode_check(address)
+	decoded = bytearray(decoded)
+	decoded[0] = 127
+	#sourcecode isn't available yet, but decoded[1] should be between 192 and 202
+	decoded[1] = 192
+	#decoded[1] = 202
+	address = base58.b58encode_check(bytes(decoded))
+	if verbose:
+		print "\t checking address " + address + " on the " + chain + " chain"
+	return -1
+	return frominsightapi(address, 'http://explorer.btchush.org/api/', chain)
+	
 def get_btv(address):
 	chain = "BTV"
 	if verbose:
@@ -335,6 +393,11 @@ def get_btx(address):
 def get_bca(address):
 	if verbose:
 		print "\tno explorer with an api found, check manually on https://bitcoinatom.net/ (prefix 23)"
+	return -1
+	
+def get_btp2(address):
+	if verbose:
+		print "\tno explorer with an api found, check manually on http://bitcoin-pool.de/explorer/BTP/ (prefix 23)"
 	return -1
 		
 def get_btsq(address):
