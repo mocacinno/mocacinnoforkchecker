@@ -87,7 +87,9 @@ def main():
 	else:
 		verbose = 0
 	if args.outfile:
-		sys.stdout = open(args.outfile, 'w')
+		file = open(args.outfile, "w")
+		file.write("if you like this project, consider some of the \"free\" coins you got from these forks to me ;)\nBTC/BCH/BTX/B2X/...: 1MocACiWLM8bYn8pCrYjy6uHq4U3CkxLaa\nBTG: GeeXaL3TKCjtdFS78oCrPsFBkEFt9fxuZF\n\n")
+	#	sys.stdout = open(args.outfile, 'w')
 
 	if args.showforks:
 		print "available forks:"
@@ -152,12 +154,20 @@ def main():
 		print "************"
 		for fail in failed:
 			print fail
+		if args.outfile:
+			file.write("\nfailed tests (usually because the api was down, or because the address wasnt found on the explorer)\n************\n")
+			for fail in failed:
+				file.write(fail + "\n") 
 	if len(untested) > 0:
 		print
 		print "untested (usually because the coin was DOA, dead, dying or to new... Sometimes because the only block explorer didnt have an api)"
 		print "************"
 		for untest in untested:
 			print untest
+		if args.outfile:
+			file.write("\nuntested (usually because the coin was DOA, dead, dying or to new... Sometimes because the only block explorer didnt have an api)\n************\n")
+			for untest in untested:
+				file.write(untest + "\n") 
 	if len(successes) > 0:
 		print
 		print
@@ -184,6 +194,12 @@ def main():
 		print "if you like this project, consider some of the \"free\" coins you got from these forks to me ;)"
 		print "BTC/BCH/BTX/B2X/...: 1MocACiWLM8bYn8pCrYjy6uHq4U3CkxLaa"
 		print "BTG: GeeXaL3TKCjtdFS78oCrPsFBkEFt9fxuZF"
+		if args.outfile:
+			file.write("\n\n\n**************************************************\n* found unspent outputs on one or more chains!!! *\n* claim at your own risk!                        *\n**************************************************\n\nsuccesslist\n***********\n")
+			for success in successes:
+				file.write(success + "\n") 
+			file.write("\n\n-------------------------------------------------------------------------------------------\n| once again, if you import your private key into ANY unknown/untrusted wallet,           |\n| you risk losing your unspent outputs on all other chains!!!                             |\n| proceed with caution                                                                    |\n|*****************************************************************************************|\n| at least make sure your wallets on the most important chains are empty before importing |\n| their private keys into unknown wallets!!!                                              |\n-------------------------------------------------------------------------------------------\n\nif you like this project, consider some of the \"free\" coins you got from these forks to me ;)\nBTC/BCH/BTX/B2X/...: 1MocACiWLM8bYn8pCrYjy6uHq4U3CkxLaa\nBTG: GeeXaL3TKCjtdFS78oCrPsFBkEFt9fxuZF\n\n")
+	file.close()
 
 ###############################################################################################	
 def veranderprefix(address, prefix):
