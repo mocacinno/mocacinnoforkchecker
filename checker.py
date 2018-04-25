@@ -11,12 +11,15 @@ def main():
 	available_forks = {
 		"B2X": get_b2x, 				#Bitcoin Segwit2X			#working
 		"BCA": get_bca, 				#Bitcoin Atom				#manual	
+		"BCB": get_bcb, 				#Bitcoin Boy				#no explorer
 		"BCD": get_bcd, 				#Bitcoin Diamond			#manual	
 		"BCH": get_bch, 				#Bitcoin Cash				#working
 		"BCHC": get_bchc, 				#Bitcoin Clashic			#working
 		"BCI": get_bci, 				#Bitcoin Intrest			#working
 		"BCK": get_bck, 				#Bitcoin King				#no explorer
+		"BCO": get_bco, 				#Bitcoin Ore				#no explorer
 		"BCP": get_bcp, 				#Bitcoin Cash Plus			#working
+		"BCS": get_bcs, 				#Bitcoin Smart				#no explorer
 		"BCW": get_bcw, 				#Bitcoin Wonder				#no explorer
 		"BCX" : get_bcx, 				#BitcoinX					#working
 		"BEC" : get_bec, 				#Bitcoin ECO				#no explorer
@@ -36,8 +39,10 @@ def main():
 		"BTP": get_btp,					#Bitcoin Pay				#no explorer
 		"BTSQ": get_btsq,				#Bitcoin Community			#no explorer
 		"BTT": get_btt,					#Bitcoin Top				#no explorer
+		"BTV": get_btv, 				#BitVote					#working
 		"BTW": get_btw, 				#Bitcoin World				#no explorer
 		"BTX": get_btx, 				#Bitcore					#working
+		"BUM": get_bum, 				#Bitcoin Uranium			#no explorer
 		"CDY": get_cdy, 				#Bitcoin Candy (for of BCH)	#working
 		"FBTC": get_fbtc, 				#Bitcoin Fast				#no explorer
 		"GOD": get_god, 				#Bitcoin God				#no explorer
@@ -256,6 +261,26 @@ def get_btt(address):
 		print "\tdidn't find a single explorer for bitcoin top (btt)"
 	return -1
 	
+def get_bcs(address):
+	if verbose:
+		print "\tdidn't find a single explorer for bitcoin smart (bcs)"
+	return -1
+	
+def get_bcb(address):
+	if verbose:
+		print "\tdidn't find a single explorer for bitcoin boy (bcb)"
+	return -1
+
+def get_bco(address):
+	if verbose:
+		print "\tdidn't find a single explorer for bitcoin ore (bco)"
+	return -1	
+	
+def get_bum(address):
+	if verbose:
+		print "\tdidn't find a single explorer for bitcoin uranium (bum)"
+	return -1
+	
 def get_nbtc(address):
 	if verbose:
 		print "\tdidn't find a single explorer for new bitcoin (nbtc)"
@@ -294,6 +319,12 @@ def get_bci(address):
 	if verbose:
 		print "\t checking address " + address + " on the " + chain + " chain"	
 	return frominsightapi(address, 'https://explorer.bitcoininterest.io/api/', chain)	
+	
+def get_btv(address):
+	chain = "BTV"
+	if verbose:
+		print "\t checking address " + address + " on the " + chain + " chain"	
+	return frominsightapi(address, 'https://block.bitvote.one/insight-api/', chain)
 	
 def get_btx(address):	
 	chain = "BCX"
