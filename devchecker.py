@@ -11,9 +11,9 @@ def main():
 	available_forks = [
 	#0=working; 1=manual; 2=no explorer; 3= defenately dead
 	{"ticker": "ABTC", "function": get_abtc, "name": "A Bitcoin", "status" : 2, "explorer" : "" },
-	{"ticker": "B2X", "function": get_b2x, "name": "Bitcoin Segwit2X", "status" : 0, "explorer" : "https://explorer.b2x-segwit.io/" },
+	{"ticker": "B2X", "function": get_b2x, "name": "Bitcoin Segwit2X", "status" : 0, "explorer" : "https://explorer.b2x-segwit.io" },
 	{"ticker": "BBC", "function": get_bbc, "name": "Big Bitcoin", "status" : 2, "explorer" : "" },
-	{"ticker": "BCA", "function": get_bca, "name": "Bitcoin Atom", "status" : 1, "explorer" : "https://bitcoinatom.net/" },
+	{"ticker": "BCA", "function": get_bca, "name": "Bitcoin Atom", "status" : 1, "explorer" : "https://bitcoinatom.net" },
 	{"ticker": "BCH", "function": get_bch, "name": "Bitcoin Cash", "status" : 0, "explorer" : "https://bitcoincash.blockexplorer.com" },
 	{"ticker": "BCB", "function": get_bcb, "name": "Bitcoin Boy", "status" : 2, "explorer" : "" },
 	{"ticker": "BCD", "function": get_bcd , "name": "Bitcoin Diamond", "status" : 1, "explorer" : "http://explorer.btcd.io" },
@@ -24,6 +24,36 @@ def main():
 	{"ticker": "BCL2", "function": get_bcl2, "name": "Bitcoin Classic", "status" : 2, "explorer" : "" },
 	{"ticker": "BCM", "function": get_bcm, "name": "Bitcoin Master	", "status" : 2, "explorer" : "" },
 	{"ticker": "BCO", "function": get_bco, "name": "Bitcoin Ore", "status" : 2, "explorer" : "" },
+	{"ticker": "BCP", "function": get_bcp, "name": "Bitcoin Cash Plus", "status" 0: , "explorer" : "http://www.bcpexp.org" },
+	{"ticker": "BCPC", "function": get_bcpc, "name": "Bitcoin Cash P", "status" 2: , "explorer" : "" },
+	{"ticker": "BCS", "function": get_bcs, "name": "Bitcoin Smart", "status" : 2, "explorer" : "" },
+	{"ticker": "BCS2", "function" get_bcs2: , "name": "Bitcoin Sudu", "status" : 2, "explorer" : "" },
+	{"ticker": "BCW", "function": get_bcw, "name": "Bitcoin Wonder", "status" : 2, "explorer" : "" },
+	{"ticker": "BCX", "function": get_bcx, "name": "BitcoinX", "status" : 0, "explorer" : "https://bcx.info" },
+	{"ticker": "BEC", "function": get_bec, "name": "Bitcoin ECO", "status" 2: , "explorer" : "" },
+	{"ticker": "BICC", "function": get_bicc, "name": "BitClassic", "status" : 0, "explorer" : "http://18.216.251.169" },
+	{"ticker": "BIFI", "function": get_bifi, "name": "Bitcoin File", "status" : 2, "explorer" : "" },
+	{"ticker": "BTCMI", "function": get_bitcoinminor, "name": "Bitcoin Minor", "status" : 2, "explorer" : "" },
+	{"ticker": "BITE", "function": get_bite, "name": "BitEthereum", "status" : 2, "explorer" : "" },
+	{"ticker": "BNR", "function": get_bnr, "name": "Bitcoin Neuro", "status" : 2, "explorer" : "" },
+	{"ticker": "BPA", "function": get_bpa, "name": "Bitcoin Pizza", "status" : 0, "explorer" : "http://47.100.55.227" },
+	{"ticker": "BTA", "function": get_bta, "name": "Bitcoin All", "status" : 2, "explorer" : "" },
+	{"ticker": "BTC", "function": get_btc, "name": "Bitcoin", "status" : 0, "explorer" : "http://www.blockchain.info" },
+	{"ticker": "BTC2", "function": get_btc2, "name": "Bitcoin 2", "status" : 2, "explorer" : "" },
+	{"ticker": "BTCH", "function": get_btch, "name": "Bitcoin Hush", "status" : 2, "explorer" : "" },
+	{"ticker": "BTCL", "function": get_btcl, "name": "Bitcoin Lite", "status" : 2, "explorer" : "" },
+	{"ticker": "BTCM", "function": get_btcm, "name": "Bitcoin Metal", "status" : 2, "explorer" : "" },
+	{"ticker": "BTCP", "function": get_btcp, "name": "Bitcoin platinum", "status" : 2, "explorer" : "" },
+	{"ticker": "BTCP2", "function": get_btcp2, "name": "Bitcoin Private", "status" :2 , "explorer" : "" },
+	{"ticker": "BTCS", "function": get_btcs, "name": "Bitcoin Stake", "status" : 2, "explorer" : "" },
+	{"ticker": "BTCTI", "function": get_btcti, "name": "BitcoinTI", "status" : 2, "explorer" : "" },
+	{"ticker": "BTCV", "function": get_btcv, "name": "Bitcoin Blvck", "status" : 2, "explorer" : "" },
+	{"ticker": "BTD", "function": get_btd, "name": "Bitcoin Dollar", "status" : 2, "explorer" : "" },
+	{"ticker": "BTF", "function": get_btf, "name": "Bitcoin Faith", "status" : 2, "explorer" : "" },
+	#{"ticker": "", "function": , "name": "", "status" : , "explorer" : "" },
+	#{"ticker": "", "function": , "name": "", "status" : , "explorer" : "" },
+	#{"ticker": "", "function": , "name": "", "status" : , "explorer" : "" },
+	#{"ticker": "", "function": , "name": "", "status" : , "explorer" : "" },
 	#{"ticker": "", "function": , "name": "", "status" : , "explorer" : "" },
 	#{"ticker": "", "function": , "name": "", "status" : , "explorer" : "" },
 	#{"ticker": "", "function": , "name": "", "status" : , "explorer" : "" },
@@ -31,32 +61,6 @@ def main():
 	#{"ticker": "", "function": , "name": "", "status" : , "explorer" : "" },
 
 	]
-		# "BCP": get_bcp, 				#Bitcoin Cash Plus			#working
-		# "BCPC": get_bcpc, 				#Bitcoin Cash Plus			#no explorer
-		# "BCS": get_bcs, 				#Bitcoin Smart				#no explorer
-		# "BCS2": get_bcs2, 				#Bitcoin Sudu				#no explorer
-		# "BCW": get_bcw, 				#Bitcoin Wonder				#no explorer
-		# "BCX" : get_bcx, 				#BitcoinX					#working
-		# "BEC" : get_bec, 				#Bitcoin ECO				#no explorer
-		# "BICC" : get_bicc,				#BitClassic					#working
-		# "BIFI" : get_bifi,				#Bitcoin File				#no explorer
-		# "BITCOINMINOR" : get_bitcoinminor,	#Bitcoin Minor			#no explorer
-		# "BITE" : get_bite,				#BitEthereum				#no explorer
-		# "BNR" : get_bnr,				#Bitcoin Neuro				#no explorer
-		# "BPA" : get_bpa, 				#Bitcoin Pizza				#working
-		# "BTA" : get_bta,				#Bitcoin All				#no explorer
-		# "BTC" : get_btc,				#Bitcoin					#working
-		# "BTC2" : get_btc2,				#Bitcoin 2					#no explorer
-		# "BTCH" : get_btch,				#Bitcoin Hush				#should be fixable if src is released
-		# "BTCL" : get_btcl,				#Bitcoin Lite				#no explorer
-		# "BTCM" : get_btcm,				#Bitcoin Metal				#no explorer
-		# "BTCP" : get_btcp,				#Bitcoin platinum			#no explorer
-		# "BTCP2" : get_btcp2,			#Bitcoin Private			#no explorer
-		# "BTCS" : get_btcs,				#Bitcoin Stake				#no explorer
-		# "BTCTI" : get_btcti,				#BitcoinTI  				#no explorer
-		# "BTCV" : get_btcv,				#Bitcoin Blvck				#no explorer
-		# "BTD" : get_btd,				#Bitcoin Dollar				#no explorer
-		# "BTF": get_btf, 				#Bitcoin Faith				#no explorer
 		# "BTG": get_btg, 				#Bitcoin Gold				#working
 		# "BTH": get_bth,					#Bitcoin Hot				#no explorer
 		# "BTN": get_btn,					#Bitcoin New				#no explorer
