@@ -8,70 +8,78 @@ import json
 from tqdm import *
 
 def main():
-	available_forks = {
-		"ABTC": get_abtc, 				#A Bitcoin					#no explorer
-		"B2X": get_b2x, 				#Bitcoin Segwit2X			#working
-		"BBC": get_bbc, 				#Big Bitcoin				#no explorer
-		"BCA": get_bca, 				#Bitcoin Atom				#manual	
-		"BCB": get_bcb, 				#Bitcoin Boy				#no explorer
-		"BCD": get_bcd, 				#Bitcoin Diamond			#manual	
-		"BCH": get_bch, 				#Bitcoin Cash				#working
-		"BCHC": get_bchc, 				#Bitcoin Clashic			#working
-		"BCI": get_bci, 				#Bitcoin Intrest			#working
-		"BCK": get_bck, 				#Bitcoin King				#no explorer
-		"BCL": get_bcl, 				#Bitcoin Lunar				#no explorer
-		"BCL2": get_bcl2, 				#Bitcoin Classic			#no explorer
-		"BCM": get_bcm, 				#Bitcoin Master				#no explorer
-		"BCO": get_bco, 				#Bitcoin Ore				#no explorer
-		"BCP": get_bcp, 				#Bitcoin Cash Plus			#working
-		"BCPC": get_bcpc, 				#Bitcoin Cash Plus			#no explorer
-		"BCS": get_bcs, 				#Bitcoin Smart				#no explorer
-		"BCS2": get_bcs2, 				#Bitcoin Sudu				#no explorer
-		"BCW": get_bcw, 				#Bitcoin Wonder				#no explorer
-		"BCX" : get_bcx, 				#BitcoinX					#working
-		"BEC" : get_bec, 				#Bitcoin ECO				#no explorer
-		"BICC" : get_bicc,				#BitClassic					#working
-		"BIFI" : get_bifi,				#Bitcoin File				#no explorer
-		"BITCOINMINOR" : get_bitcoinminor,	#Bitcoin Minor			#no explorer
-		"BITE" : get_bite,				#BitEthereum				#no explorer
-		"BNR" : get_bnr,				#Bitcoin Neuro				#no explorer
-		"BPA" : get_bpa, 				#Bitcoin Pizza				#working
-		"BTA" : get_bta,				#Bitcoin All				#no explorer
-		"BTC" : get_btc,				#Bitcoin					#working
-		"BTC2" : get_btc2,				#Bitcoin 2					#no explorer
-		"BTCH" : get_btch,				#Bitcoin Hush				#should be fixable if src is released
-		"BTCL" : get_btcl,				#Bitcoin Lite				#no explorer
-		"BTCM" : get_btcm,				#Bitcoin Metal				#no explorer
-		"BTCP" : get_btcp,				#Bitcoin platinum			#no explorer
-		"BTCP2" : get_btcp2,			#Bitcoin Private			#no explorer
-		"BTCS" : get_btcs,				#Bitcoin Stake				#no explorer
-		"BTCTI" : get_btcti,				#BitcoinTI  				#no explorer
-		"BTCV" : get_btcv,				#Bitcoin Blvck				#no explorer
-		"BTD" : get_btd,				#Bitcoin Dollar				#no explorer
-		"BTF": get_btf, 				#Bitcoin Faith				#no explorer
-		"BTG": get_btg, 				#Bitcoin Gold				#working
-		"BTH": get_bth,					#Bitcoin Hot				#no explorer
-		"BTN": get_btn,					#Bitcoin New				#no explorer
-		"BTP": get_btp,					#Bitcoin Pay				#no explorer
-		"BTP2": get_btp2,				#Bitcoin Pro				#manual
-		"BTR": get_btr,					#Bitcoin Rhodium			#no explorer
-		"BTSQ": get_btsq,				#Bitcoin Community			#no explorer
-		"BTT": get_btt,					#Bitcoin Top				#no explorer
-		"BTV": get_btv, 				#BitVote					#working
-		"BTW": get_btw, 				#Bitcoin World				#no explorer
-		"BTX": get_btx, 				#Bitcore					#working
-		"BUM": get_bum, 				#Bitcoin Uranium			#no explorer
-		"CDY": get_cdy, 				#Bitcoin Candy (for of BCH)	#working
-		"FBTC": get_fbtc, 				#Bitcoin Fast				#no explorer
-		"GOD": get_god, 				#Bitcoin God				#no explorer
-		"LBTC": get_lbtc,				#Lightning Bitcoin			#manual
-		"OBTC": get_obtc,				#Oil Bitcoin				#no explorer
-		"NBTC": get_nbtc,				#New Bitcoin				#no explorer
-		"QBTC": get_qbtc,				#Quantum Bitcoin			#no explorer
-		"SUPERBTC": get_superbtc, 		#Super Bitcoin				#working
-		"UBTC": get_ubtc, 				#United Bitcoin				#manual
-		"WBTC": get_wbtc, 				#World Bitcoin				#working
-	}
+	available_forks = [
+	#0=working; 1=manual; 2=no explorer; 3= defenately dead
+	{"ticker": "ABTC", "function": get_abtc, "name": "A Bitcoin", "status" : 2, "explorer" : "" },
+	{"ticker": "B2X", "function": get_b2x, "name": "Bitcoin Segwit2X", "status" : 0, "explorer" : "https://explorer.b2x-segwit.io/" },
+	{"ticker": "BBC", "function": get_bbc, "name": "Big Bitcoin", "status" : 2, "explorer" : "" },
+	{"ticker": "BCA", "function": get_bca, "name": "Bitcoin Atom", "status" : 1, "explorer" : "https://bitcoinatom.net/" },
+	{"ticker": "BCH", "function": get_bch, "name": "Bitcoin Cash", "status" : 0, "explorer" : "https://bitcoincash.blockexplorer.com" },
+	{"ticker": "BCB", "function": get_bcb, "name": "Bitcoin Boy", "status" : 2, "explorer" : "" },
+	{"ticker": "BCD", "function": get_bcd , "name": "Bitcoin Diamond", "status" : 1, "explorer" : "http://explorer.btcd.io" },
+	{"ticker": "BCHC", "function": get_bchc, "name": "Bitcoin Clashic", "status" : 0, "explorer" : "https://truevisionofsatoshi.com" },
+	{"ticker": "BCI", "function": get_bci, "name": "Bitcoin Intrest", "status" : 0, "explorer" : "https://explorer.bitcoininterest.io" },
+	{"ticker": "BCK", "function": get_bck, "name": "Bitcoin King", "status" : 2, "explorer" : "" },
+	{"ticker": "BCL", "function": get_bcl, "name": "Bitcoin Lunar", "status" : 2, "explorer" : "" },
+	{"ticker": "BCL2", "function": get_bcl2, "name": "Bitcoin Classic", "status" : 2, "explorer" : "" },
+	{"ticker": "BCM", "function": get_bcm, "name": "Bitcoin Master	", "status" : 2, "explorer" : "" },
+	{"ticker": "BCO", "function": get_bco, "name": "Bitcoin Ore", "status" : 2, "explorer" : "" },
+	#{"ticker": "", "function": , "name": "", "status" : , "explorer" : "" },
+	#{"ticker": "", "function": , "name": "", "status" : , "explorer" : "" },
+	#{"ticker": "", "function": , "name": "", "status" : , "explorer" : "" },
+	#{"ticker": "", "function": , "name": "", "status" : , "explorer" : "" },
+	#{"ticker": "", "function": , "name": "", "status" : , "explorer" : "" },
+
+	]
+		# "BCP": get_bcp, 				#Bitcoin Cash Plus			#working
+		# "BCPC": get_bcpc, 				#Bitcoin Cash Plus			#no explorer
+		# "BCS": get_bcs, 				#Bitcoin Smart				#no explorer
+		# "BCS2": get_bcs2, 				#Bitcoin Sudu				#no explorer
+		# "BCW": get_bcw, 				#Bitcoin Wonder				#no explorer
+		# "BCX" : get_bcx, 				#BitcoinX					#working
+		# "BEC" : get_bec, 				#Bitcoin ECO				#no explorer
+		# "BICC" : get_bicc,				#BitClassic					#working
+		# "BIFI" : get_bifi,				#Bitcoin File				#no explorer
+		# "BITCOINMINOR" : get_bitcoinminor,	#Bitcoin Minor			#no explorer
+		# "BITE" : get_bite,				#BitEthereum				#no explorer
+		# "BNR" : get_bnr,				#Bitcoin Neuro				#no explorer
+		# "BPA" : get_bpa, 				#Bitcoin Pizza				#working
+		# "BTA" : get_bta,				#Bitcoin All				#no explorer
+		# "BTC" : get_btc,				#Bitcoin					#working
+		# "BTC2" : get_btc2,				#Bitcoin 2					#no explorer
+		# "BTCH" : get_btch,				#Bitcoin Hush				#should be fixable if src is released
+		# "BTCL" : get_btcl,				#Bitcoin Lite				#no explorer
+		# "BTCM" : get_btcm,				#Bitcoin Metal				#no explorer
+		# "BTCP" : get_btcp,				#Bitcoin platinum			#no explorer
+		# "BTCP2" : get_btcp2,			#Bitcoin Private			#no explorer
+		# "BTCS" : get_btcs,				#Bitcoin Stake				#no explorer
+		# "BTCTI" : get_btcti,				#BitcoinTI  				#no explorer
+		# "BTCV" : get_btcv,				#Bitcoin Blvck				#no explorer
+		# "BTD" : get_btd,				#Bitcoin Dollar				#no explorer
+		# "BTF": get_btf, 				#Bitcoin Faith				#no explorer
+		# "BTG": get_btg, 				#Bitcoin Gold				#working
+		# "BTH": get_bth,					#Bitcoin Hot				#no explorer
+		# "BTN": get_btn,					#Bitcoin New				#no explorer
+		# "BTP": get_btp,					#Bitcoin Pay				#no explorer
+		# "BTP2": get_btp2,				#Bitcoin Pro				#manual
+		# "BTR": get_btr,					#Bitcoin Rhodium			#no explorer
+		# "BTSQ": get_btsq,				#Bitcoin Community			#no explorer
+		# "BTT": get_btt,					#Bitcoin Top				#no explorer
+		# "BTV": get_btv, 				#BitVote					#working
+		# "BTW": get_btw, 				#Bitcoin World				#no explorer
+		# "BTX": get_btx, 				#Bitcore					#working
+		# "BUM": get_bum, 				#Bitcoin Uranium			#no explorer
+		# "CDY": get_cdy, 				#Bitcoin Candy (for of BCH)	#working
+		# "FBTC": get_fbtc, 				#Bitcoin Fast				#no explorer
+		# "GOD": get_god, 				#Bitcoin God				#no explorer
+		# "LBTC": get_lbtc,				#Lightning Bitcoin			#manual
+		# "OBTC": get_obtc,				#Oil Bitcoin				#no explorer
+		# "NBTC": get_nbtc,				#New Bitcoin				#no explorer
+		# "QBTC": get_qbtc,				#Quantum Bitcoin			#no explorer
+		# "SUPERBTC": get_superbtc, 		#Super Bitcoin				#working
+		# "UBTC": get_ubtc, 				#United Bitcoin				#manual
+		# "WBTC": get_wbtc, 				#World Bitcoin				#working
+	
 	parser = argparse.ArgumentParser()
 	parser.add_argument("--address", help="query a single address")
 	parser.add_argument("--addressfile", help="query all addresses in this file")
@@ -80,6 +88,7 @@ def main():
 	parser.add_argument("--verbose", help="show all tests while they are running" , action='store_true')
 	parser.add_argument("--outfile", help="output to this file instead of stdout (screen)")
 	parser.add_argument("--timeout", help="number of seconds to wait between 2 requests", nargs='?', const=2, type=int)
+	parser.add_argument("--minimumstatus", help="minimumstatus 1 = only check chains that can be checked automatically; minimumstatus 2 = also print chains that have to checked manually: minmimstatus 3 = also print out chains that cannot be checked because they are dead or the absense of an explorer", type=int)
 	args = parser.parse_args()
 	global verbose
 	if args.verbose:
@@ -96,11 +105,11 @@ def main():
 		print "available forks:"
 		print "****************"
 		for printfork in available_forks:
-			print printfork
+			print printfork['ticker'] + "\tstatus: " + str(printfork['status'] + 1) + "\tfull name: " + str(printfork['name']) + "\t\texplorer: " + str(printfork['explorer'])
 		sys.exit("")
 
 	addresslist = []
-	forklist = []
+	forklist = {}
 	successes = []
 	untested = []
 	failed = []
@@ -115,20 +124,25 @@ def main():
 					addresslist.append(address.rstrip())
 	if len(addresslist) == 0:
 		sys.exit("no addresses available")
-		
-	if args.fork:
-		for forkname, forkfunction in available_forks.iteritems(): 
-			if forkname == args.fork:
-				forklist = {forkname:forkfunction}
+	if args.minimumstatus:
+		minimumstatus = args.minimumstatus
 	else:
-		forklist = available_forks
+		minimumstatus = 4
+	if args.fork:
+		for currentfork in available_forks: 
+			if currentfork['ticker'] == args.fork:
+				forklist = {currentfork['ticker']:currentfork['function']}
+	else:
+		for currentfork in available_forks: 
+			if currentfork['status'] < minimumstatus:
+				forklist.update({currentfork['ticker']:currentfork['function']})
 		
 	if len(forklist) == 0:
 		sys.exit("no forks to check")
 	if args.timeout:
 		timeout = args.timeout
 	else:
-		timeout = 2
+		timeout = 3
 	
 	if not verbose:
 		numberaddresses = len(addresslist)
