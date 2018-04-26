@@ -4,6 +4,7 @@ import requests
 import base58
 import time
 import urllib3
+import urllib
 import json
 from tqdm import *
 
@@ -75,6 +76,14 @@ def main():
 	{"ticker": "WBTC", "function": get_wbtc, "name": "World Bitcoin", "status" :0, "CMC": "", "explorer" : "http://142.44.242.32:3001" },
 	]
 	
+	global coinmarketcapdb
+	url = "https://api.coinmarketcap.com/v1/ticker/?limit=10000"
+	response = urllib.urlopen(url)
+	coinmarketcapdb = json.loads(response.read())
+	
+	global grandtotal
+	grandtotal = float(0)
+	
 	parser = argparse.ArgumentParser()
 	parser.add_argument("--address", help="query a single address")
 	parser.add_argument("--addressfile", help="query all addresses in this file")
@@ -83,7 +92,7 @@ def main():
 	parser.add_argument("--verbose", help="show all tests while they are running" , action='store_true')
 	parser.add_argument("--outfile", help="output to this file instead of stdout (screen)")
 	parser.add_argument("--timeout", help="number of seconds to wait between 2 requests", nargs='?', const=2, type=int)
-	parser.add_argument("--minimumstatus", help="minimumstatus 1 = only check chains that can be checked automatically; minimumstatus 2 = also print chains that have to checked manually: minmimstatus 3 = also print out chains that cannot be checked because they are dead or the absense of an explorer", type=int)
+	parser.add_argument("--maximumstatus", help="maximumstatus 1 = only check chains that can be checked automatically; maximumstatus 2 = also print chains that have to checked manually: minmimstatus 3 = also print out chains that cannot be checked because they are dead or the absense of an explorer", type=int)
 	args = parser.parse_args()
 	global verbose
 	if args.verbose:
@@ -118,17 +127,17 @@ def main():
 					addresslist.append(address.rstrip())
 	if len(addresslist) == 0:
 		sys.exit("no addresses available")
-	if args.minimumstatus:
-		minimumstatus = args.minimumstatus
+	if args.maximumstatus:
+		maximumstatus = args.maximumstatus
 	else:
-		minimumstatus = 4
+		maximumstatus = 4
 	if args.fork:
 		for currentfork in available_forks: 
 			if currentfork['ticker'] == args.fork:
 				forklist = {currentfork['ticker']:currentfork['function']}
 	else:
 		for currentfork in available_forks: 
-			if currentfork['status'] < minimumstatus:
+			if currentfork['status'] < maximumstatus:
 				forklist.update({currentfork['ticker']:currentfork['function']})
 		
 	if len(forklist) == 0:
@@ -231,18 +240,30 @@ def main():
 			file = open(args.outfile, "a")
 			file.write("\n\n-------------------------------------------------------------------------------------------\n| once again, if you import your private key into ANY unknown/untrusted wallet,           |\n| you risk losing your unspent outputs on all other chains!!!                             |\n| proceed with caution                                                                    |\n|*****************************************************************************************|\n| at least make sure your wallets on the most important chains are empty before importing |\n| their private keys into unknown wallets!!!                                              |\n-------------------------------------------------------------------------------------------\n\nif you like this project, consider some of the \"free\" coins you got from these forks to me ;)\nBTC/BCH/BTX/B2X/...: 1MocACiWLM8bYn8pCrYjy6uHq4U3CkxLaa\nBTG: GeeXaL3TKCjtdFS78oCrPsFBkEFt9fxuZF\n\n")
 			file.close()
-
+	
+	print "if you would exchange all coins right now, you'd make a whopping $" + str(grandtotal) 
+	if args.outfile:
+		file = open(args.outfile, "a")
+		file.write("if you would exchange all coins right now, you'd make a whopping $" + str(grandtotal) + "\n")
+		file.close()
+		
 ###############################################################################################	
 def trypricefetch(testfork, balance):
+	global grandtotal
 	cmc = ""
-	price = ""
+	price = ". There is no linkt to coinmarketcap, so we can't find the price"
 	for currenttestfork in available_forks:
 		if currenttestfork['ticker'] == testfork:
 			cmc = currenttestfork['CMC']
 	if len(cmc) > 1:
-		price = "we can deduct a price from coinmarketcap!"
-	else:
-		price = "no linkt to coinmarketcap, we can't find the price"
+		found = 0
+		for coinmarketlisting in coinmarketcapdb:
+			if cmc == coinmarketlisting['id']:
+				found = 1
+				prijspercoin = coinmarketlisting['price_usd']
+				totaal = float(prijspercoin) * float(balance)
+				grandtotal = grandtotal + totaal
+				price = ". Coinmarketcap says this balance of " + str(balance) + str(testfork) + " is worth $" + str(prijspercoin) + " per coin. In your case this comes down to " + str(totaal) + "USD"
 	return price
 
 def veranderprefix(address, prefix):
