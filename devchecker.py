@@ -24,13 +24,13 @@ def main():
 	{"ticker": "BCL2", "function": get_bcl2, "name": "Bitcoin Classic", "status" : 2, "explorer" : "" },
 	{"ticker": "BCM", "function": get_bcm, "name": "Bitcoin Master	", "status" : 2, "explorer" : "" },
 	{"ticker": "BCO", "function": get_bco, "name": "Bitcoin Ore", "status" : 2, "explorer" : "" },
-	{"ticker": "BCP", "function": get_bcp, "name": "Bitcoin Cash Plus", "status" 0: , "explorer" : "http://www.bcpexp.org" },
-	{"ticker": "BCPC", "function": get_bcpc, "name": "Bitcoin Cash P", "status" 2: , "explorer" : "" },
+	{"ticker": "BCP", "function": get_bcp, "name": "Bitcoin Cash Plus", "status" :0 , "explorer" : "http://www.bcpexp.org" },
+	{"ticker": "BCPC", "function": get_bcpc, "name": "Bitcoin Cash P", "status" :2 , "explorer" : "" },
 	{"ticker": "BCS", "function": get_bcs, "name": "Bitcoin Smart", "status" : 2, "explorer" : "" },
-	{"ticker": "BCS2", "function" get_bcs2: , "name": "Bitcoin Sudu", "status" : 2, "explorer" : "" },
+	{"ticker": "BCS2", "function" : get_bcs2 , "name": "Bitcoin Sudu", "status" : 2, "explorer" : "" },
 	{"ticker": "BCW", "function": get_bcw, "name": "Bitcoin Wonder", "status" : 2, "explorer" : "" },
 	{"ticker": "BCX", "function": get_bcx, "name": "BitcoinX", "status" : 0, "explorer" : "https://bcx.info" },
-	{"ticker": "BEC", "function": get_bec, "name": "Bitcoin ECO", "status" 2: , "explorer" : "" },
+	{"ticker": "BEC", "function": get_bec, "name": "Bitcoin ECO", "status" : 2 , "explorer" : "" },
 	{"ticker": "BICC", "function": get_bicc, "name": "BitClassic", "status" : 0, "explorer" : "http://18.216.251.169" },
 	{"ticker": "BIFI", "function": get_bifi, "name": "Bitcoin File", "status" : 2, "explorer" : "" },
 	{"ticker": "BTCMI", "function": get_bitcoinminor, "name": "Bitcoin Minor", "status" : 2, "explorer" : "" },
@@ -50,39 +50,29 @@ def main():
 	{"ticker": "BTCV", "function": get_btcv, "name": "Bitcoin Blvck", "status" : 2, "explorer" : "" },
 	{"ticker": "BTD", "function": get_btd, "name": "Bitcoin Dollar", "status" : 2, "explorer" : "" },
 	{"ticker": "BTF", "function": get_btf, "name": "Bitcoin Faith", "status" : 2, "explorer" : "" },
-	#{"ticker": "", "function": , "name": "", "status" : , "explorer" : "" },
-	#{"ticker": "", "function": , "name": "", "status" : , "explorer" : "" },
-	#{"ticker": "", "function": , "name": "", "status" : , "explorer" : "" },
-	#{"ticker": "", "function": , "name": "", "status" : , "explorer" : "" },
-	#{"ticker": "", "function": , "name": "", "status" : , "explorer" : "" },
-	#{"ticker": "", "function": , "name": "", "status" : , "explorer" : "" },
-	#{"ticker": "", "function": , "name": "", "status" : , "explorer" : "" },
-	#{"ticker": "", "function": , "name": "", "status" : , "explorer" : "" },
-	#{"ticker": "", "function": , "name": "", "status" : , "explorer" : "" },
-
+	{"ticker": "BTG", "function": get_btg, "name": "Bitcoin Gold", "status" : 0, "explorer" : "https://btgexplorer.com" },
+	{"ticker": "BTH", "function": get_bth, "name": "Bitcoin Hot", "status" : 2, "explorer" : "" },
+	{"ticker": "BTN", "function": get_btn, "name": "Bitcoin New", "status" : 2, "explorer" : "" },
+	{"ticker": "BTP", "function": get_btp, "name": "Bitcoin Pay", "status" : 2, "explorer" : "" },
+	{"ticker": "BTP2", "function": get_btp2, "name": "Bitcoin Pro", "status" : 1, "explorer" : "http://bitcoin-pool.de/explorer/BTP/" },
+	{"ticker": "BTR", "function": get_btr, "name": "Bitcoin Rhodium", "status" : 2, "explorer" : "" },
+	{"ticker": "BTSQ", "function": get_btsq, "name": "Bitcoin Community", "status" : 2, "explorer" : "" },
+	{"ticker": "BTT", "function": get_btt, "name": "Bitcoin Top", "status" : 2, "explorer" : "" },
+	{"ticker": "BTV", "function": get_btv, "name": "BitVote", "status" : 0, "explorer" : "https://block.bitvote.one" },
+	{"ticker": "BTW", "function": get_btw, "name": "Bitcoin World", "status" : 2, "explorer" : "" },
+	{"ticker": "BTX", "function": get_btx, "name": "Bitcore", "status" : 0, "explorer" : "https://chainz.cryptoid.info/btx/" },
+	{"ticker": "BUM", "function": get_bum, "name": "Bitcoin Uranium", "status" :2 , "explorer" : "" },
+	{"ticker": "CDY", "function": get_cdy, "name": "Bitcoin Candy (fork of BCH)", "status" : 0 , "explorer" : "http://block.cdy.one/" },
+	{"ticker": "FBTC", "function": get_fbtc, "name": "Bitcoin Fast", "status" : 2, "explorer" : "" },
+	{"ticker": "GOD", "function": get_god, "name": "Bitcoin God", "status" : 2, "explorer" : "" },
+	{"ticker": "LBTC", "function": get_lbtc, "name": "Lightning Bitcoin", "status" : 1, "explorer" : "http://explorer.lbtc.io" },
+	{"ticker": "OBTC", "function": get_obtc, "name": "Oil Bitcoin", "status" :2 , "explorer" : "" },
+	{"ticker": "NBTC", "function": get_nbtc, "name": "New Bitcoin", "status" : 2, "explorer" : "" },
+	{"ticker": "QBTC", "function": get_qbtc, "name": "Quantum Bitcoin", "status" : 2 , "explorer" : "" },
+	{"ticker": "SBTC", "function": get_superbtc, "name": "Super Bitcoin", "status" : 0, "explorer" : "http://block.superbtc.org" },
+	{"ticker": "UBTC", "function": get_ubtc, "name": "United Bitcoin	", "status" : 1, "explorer" : "https://www.ub.com/explorer" },
+	{"ticker": "WBTC", "function": get_wbtc, "name": "World Bitcoin", "status" :0, "explorer" : "http://142.44.242.32:3001" },
 	]
-		# "BTG": get_btg, 				#Bitcoin Gold				#working
-		# "BTH": get_bth,					#Bitcoin Hot				#no explorer
-		# "BTN": get_btn,					#Bitcoin New				#no explorer
-		# "BTP": get_btp,					#Bitcoin Pay				#no explorer
-		# "BTP2": get_btp2,				#Bitcoin Pro				#manual
-		# "BTR": get_btr,					#Bitcoin Rhodium			#no explorer
-		# "BTSQ": get_btsq,				#Bitcoin Community			#no explorer
-		# "BTT": get_btt,					#Bitcoin Top				#no explorer
-		# "BTV": get_btv, 				#BitVote					#working
-		# "BTW": get_btw, 				#Bitcoin World				#no explorer
-		# "BTX": get_btx, 				#Bitcore					#working
-		# "BUM": get_bum, 				#Bitcoin Uranium			#no explorer
-		# "CDY": get_cdy, 				#Bitcoin Candy (for of BCH)	#working
-		# "FBTC": get_fbtc, 				#Bitcoin Fast				#no explorer
-		# "GOD": get_god, 				#Bitcoin God				#no explorer
-		# "LBTC": get_lbtc,				#Lightning Bitcoin			#manual
-		# "OBTC": get_obtc,				#Oil Bitcoin				#no explorer
-		# "NBTC": get_nbtc,				#New Bitcoin				#no explorer
-		# "QBTC": get_qbtc,				#Quantum Bitcoin			#no explorer
-		# "SUPERBTC": get_superbtc, 		#Super Bitcoin				#working
-		# "UBTC": get_ubtc, 				#United Bitcoin				#manual
-		# "WBTC": get_wbtc, 				#World Bitcoin				#working
 	
 	parser = argparse.ArgumentParser()
 	parser.add_argument("--address", help="query a single address")
