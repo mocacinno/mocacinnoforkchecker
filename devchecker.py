@@ -93,7 +93,6 @@ def main():
 		file = open(args.outfile, "w")
 		file.write("if you like this project, consider some of the \"free\" coins you got from these forks to me ;)\nBTC/BCH/BTX/B2X/...: 1MocACiWLM8bYn8pCrYjy6uHq4U3CkxLaa\nBTG: GeeXaL3TKCjtdFS78oCrPsFBkEFt9fxuZF\n\n")
 		file.close()
-	#	sys.stdout = open(args.outfile, 'w')
 
 	if args.showforks:
 		print "available forks:"
@@ -159,7 +158,7 @@ def main():
 				successes.append(testaddress + " has a balance of " + str(balance) + " on " + testfork)
 				if args.outfile:
 					file = open(args.outfile, "a")
-					file.write(testaddress + " has a balance of " + str(balance) + " on " + testfork + "\n")
+					file.write("[SUCCESS] " + testaddress + " has a balance of " + str(balance) + " on " + testfork + "\n")
 					file.close()
 			time.sleep(timeout)
 	if not verbose:
