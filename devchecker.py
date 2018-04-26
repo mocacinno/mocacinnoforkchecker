@@ -8,10 +8,11 @@ import json
 from tqdm import *
 
 def main():
+	global available_forks
 	available_forks = [
 	#0=working; 1=manual; 2=no explorer; 3= defenately dead
 	{"ticker": "ABTC", "function": get_abtc, "name": "A Bitcoin", "status" : 2, "CMC": "", "explorer" : "" },
-	{"ticker": "B2X", "function": get_b2x, "name": "Bitcoin Segwit2X", "status" : 0, "CMC": "", "explorer" : "https://explorer.b2x-segwit.io" },
+	{"ticker": "B2X", "function": get_b2x, "name": "Bitcoin Segwit2X", "status" : 0, "CMC": "segwit2x", "explorer" : "https://explorer.b2x-segwit.io" },
 	{"ticker": "BBC", "function": get_bbc, "name": "Big Bitcoin", "status" : 2, "CMC": "", "explorer" : "" },
 	{"ticker": "BCA", "function": get_bca, "name": "Bitcoin Atom", "status" : 1, "CMC": "", "explorer" : "https://bitcoinatom.net" },
 	{"ticker": "BCH", "function": get_bch, "name": "Bitcoin Cash", "status" : 0, "CMC": "", "explorer" : "https://bitcoincash.blockexplorer.com" },
@@ -38,7 +39,7 @@ def main():
 	{"ticker": "BNR", "function": get_bnr, "name": "Bitcoin Neuro", "status" : 2, "CMC": "", "explorer" : "" },
 	{"ticker": "BPA", "function": get_bpa, "name": "Bitcoin Pizza", "status" : 0, "CMC": "", "explorer" : "http://47.100.55.227" },
 	{"ticker": "BTA", "function": get_bta, "name": "Bitcoin All", "status" : 2, "CMC": "", "explorer" : "" },
-	{"ticker": "BTC", "function": get_btc, "name": "Bitcoin", "status" : 0, "CMC": "", "explorer" : "http://www.blockchain.info" },
+	{"ticker": "BTC", "function": get_btc, "name": "Bitcoin", "status" : 0, "CMC": "bitcoin", "explorer" : "http://www.blockchain.info" },
 	{"ticker": "BTC2", "function": get_btc2, "name": "Bitcoin 2", "status" : 2, "CMC": "", "explorer" : "" },
 	{"ticker": "BTCH", "function": get_btch, "name": "Bitcoin Hush", "status" : 2, "CMC": "", "explorer" : "" },
 	{"ticker": "BTCL", "function": get_btcl, "name": "Bitcoin Lite", "status" : 2, "CMC": "", "explorer" : "" },
@@ -50,7 +51,7 @@ def main():
 	{"ticker": "BTCV", "function": get_btcv, "name": "Bitcoin Blvck", "status" : 2, "CMC": "", "explorer" : "" },
 	{"ticker": "BTD", "function": get_btd, "name": "Bitcoin Dollar", "status" : 2, "CMC": "", "explorer" : "" },
 	{"ticker": "BTF", "function": get_btf, "name": "Bitcoin Faith", "status" : 2, "CMC": "", "explorer" : "" },
-	{"ticker": "BTG", "function": get_btg, "name": "Bitcoin Gold", "status" : 0, "CMC": "", "explorer" : "https://btgexplorer.com" },
+	{"ticker": "BTG", "function": get_btg, "name": "Bitcoin Gold", "status" : 0, "CMC": "bitcoin-gold", "explorer" : "https://btgexplorer.com" },
 	{"ticker": "BTH", "function": get_bth, "name": "Bitcoin Hot", "status" : 2, "CMC": "", "explorer" : "" },
 	{"ticker": "BTN", "function": get_btn, "name": "Bitcoin New", "status" : 2, "CMC": "", "explorer" : "" },
 	{"ticker": "BTP", "function": get_btp, "name": "Bitcoin Pay", "status" : 2, "CMC": "", "explorer" : "" },
@@ -60,7 +61,7 @@ def main():
 	{"ticker": "BTT", "function": get_btt, "name": "Bitcoin Top", "status" : 2, "CMC": "", "explorer" : "" },
 	{"ticker": "BTV", "function": get_btv, "name": "BitVote", "status" : 0, "CMC": "", "explorer" : "https://block.bitvote.one" },
 	{"ticker": "BTW", "function": get_btw, "name": "Bitcoin World", "status" : 2, "CMC": "", "explorer" : "" },
-	{"ticker": "BTX", "function": get_btx, "name": "Bitcore", "status" : 0, "CMC": "", "explorer" : "https://chainz.cryptoid.info/btx/" },
+	{"ticker": "BTX", "function": get_btx, "name": "Bitcore", "status" : 0, "CMC": "bitcore", "explorer" : "https://chainz.cryptoid.info/btx/" },
 	{"ticker": "BUM", "function": get_bum, "name": "Bitcoin Uranium", "status" :2 , "CMC": "", "explorer" : "" },
 	{"ticker": "CDY", "function": get_cdy, "name": "Bitcoin Candy (fork of BCH)", "status" : 0 , "CMC": "", "explorer" : "http://block.cdy.one/" },
 	{"ticker": "FBTC", "function": get_fbtc, "name": "Bitcoin Fast", "status" : 2, "CMC": "", "explorer" : "" },
@@ -155,10 +156,12 @@ def main():
 			if balance == -2:
 				failed.append("for some reason, address " + testaddress + " failed to be tested on " + testfork)
 			if balance > 0:
-				successes.append(testaddress + " has a balance of " + str(balance) + " on " + testfork)
+				price = trypricefetch(testfork, balance)
+				successes.append(testaddress + " has a balance of " + str(balance) + " on " + testfork + " " + price)
+				
 				if args.outfile:
 					file = open(args.outfile, "a")
-					file.write("[SUCCESS] " + testaddress + " has a balance of " + str(balance) + " on " + testfork + "\n")
+					file.write("[SUCCESS] " + testaddress + " has a balance of " + str(balance) + " on " + testfork + " " + price + "\n")
 					file.close()
 			time.sleep(timeout)
 	if not verbose:
@@ -230,6 +233,18 @@ def main():
 			file.close()
 
 ###############################################################################################	
+def trypricefetch(testfork, balance):
+	cmc = ""
+	price = ""
+	for currenttestfork in available_forks:
+		if currenttestfork['ticker'] == testfork:
+			cmc = currenttestfork['CMC']
+	if len(cmc) > 1:
+		price = "we can deduct a price from coinmarketcap!"
+	else:
+		price = "no linkt to coinmarketcap, we can't find the price"
+	return price
+
 def veranderprefix(address, prefix):
 	try:
 		decoded = base58.b58decode_check(address)
@@ -460,7 +475,7 @@ def get_btc(address):
 	chain = "BTC"
 	if verbose:
 		print "\t checking address " + address + " on the " + chain + " chain"	
-	return fromchainz(address, 'https://chainz.cryptoid.info/btc/', chain)		
+	return frominsightapi(address, 'https://insight.bitpay.com/api/', chain)		
 		
 def get_bci(address):
 	chain = "BCI"
