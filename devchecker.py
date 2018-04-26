@@ -127,6 +127,8 @@ def main():
 					addresslist.append(address.rstrip())
 	if len(addresslist) == 0:
 		sys.exit("no addresses available")
+	else:
+		print "testing " + str(len(addresslist)) + " addresses for unspent outputs"
 	if args.maximumstatus:
 		maximumstatus = args.maximumstatus
 	else:
@@ -142,6 +144,8 @@ def main():
 		
 	if len(forklist) == 0:
 		sys.exit("no forks to check")
+	else:
+		print "testing " + str(len(forklist)) + " chains for unspent outputs"
 	if args.timeout:
 		timeout = args.timeout
 	else:

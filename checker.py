@@ -4,74 +4,86 @@ import requests
 import base58
 import time
 import urllib3
+import urllib
 import json
 from tqdm import *
 
 def main():
-	available_forks = {
-		"ABTC": get_abtc, 				#A Bitcoin					#no explorer
-		"B2X": get_b2x, 				#Bitcoin Segwit2X			#working
-		"BBC": get_bbc, 				#Big Bitcoin				#no explorer
-		"BCA": get_bca, 				#Bitcoin Atom				#manual	
-		"BCB": get_bcb, 				#Bitcoin Boy				#no explorer
-		"BCD": get_bcd, 				#Bitcoin Diamond			#manual	
-		"BCH": get_bch, 				#Bitcoin Cash				#working
-		"BCHC": get_bchc, 				#Bitcoin Clashic			#working
-		"BCI": get_bci, 				#Bitcoin Intrest			#working
-		"BCK": get_bck, 				#Bitcoin King				#no explorer
-		"BCL": get_bcl, 				#Bitcoin Lunar				#no explorer
-		"BCL2": get_bcl2, 				#Bitcoin Classic			#no explorer
-		"BCM": get_bcm, 				#Bitcoin Master				#no explorer
-		"BCO": get_bco, 				#Bitcoin Ore				#no explorer
-		"BCP": get_bcp, 				#Bitcoin Cash Plus			#working
-		"BCPC": get_bcpc, 				#Bitcoin Cash Plus			#no explorer
-		"BCS": get_bcs, 				#Bitcoin Smart				#no explorer
-		"BCS2": get_bcs2, 				#Bitcoin Sudu				#no explorer
-		"BCW": get_bcw, 				#Bitcoin Wonder				#no explorer
-		"BCX" : get_bcx, 				#BitcoinX					#working
-		"BEC" : get_bec, 				#Bitcoin ECO				#no explorer
-		"BICC" : get_bicc,				#BitClassic					#working
-		"BIFI" : get_bifi,				#Bitcoin File				#no explorer
-		"BITCOINMINOR" : get_bitcoinminor,	#Bitcoin Minor			#no explorer
-		"BITE" : get_bite,				#BitEthereum				#no explorer
-		"BNR" : get_bnr,				#Bitcoin Neuro				#no explorer
-		"BPA" : get_bpa, 				#Bitcoin Pizza				#working
-		"BTA" : get_bta,				#Bitcoin All				#no explorer
-		"BTC" : get_btc,				#Bitcoin					#working
-		"BTC2" : get_btc2,				#Bitcoin 2					#no explorer
-		"BTCH" : get_btch,				#Bitcoin Hush				#should be fixable if src is released
-		"BTCL" : get_btcl,				#Bitcoin Lite				#no explorer
-		"BTCM" : get_btcm,				#Bitcoin Metal				#no explorer
-		"BTCP" : get_btcp,				#Bitcoin platinum			#no explorer
-		"BTCP2" : get_btcp2,			#Bitcoin Private			#no explorer
-		"BTCS" : get_btcs,				#Bitcoin Stake				#no explorer
-		"BTCTI" : get_btcti,				#BitcoinTI  				#no explorer
-		"BTCV" : get_btcv,				#Bitcoin Blvck				#no explorer
-		"BTD" : get_btd,				#Bitcoin Dollar				#no explorer
-		"BTF": get_btf, 				#Bitcoin Faith				#no explorer
-		"BTG": get_btg, 				#Bitcoin Gold				#working
-		"BTH": get_bth,					#Bitcoin Hot				#no explorer
-		"BTN": get_btn,					#Bitcoin New				#no explorer
-		"BTP": get_btp,					#Bitcoin Pay				#no explorer
-		"BTP2": get_btp2,				#Bitcoin Pro				#manual
-		"BTR": get_btr,					#Bitcoin Rhodium			#no explorer
-		"BTSQ": get_btsq,				#Bitcoin Community			#no explorer
-		"BTT": get_btt,					#Bitcoin Top				#no explorer
-		"BTV": get_btv, 				#BitVote					#working
-		"BTW": get_btw, 				#Bitcoin World				#no explorer
-		"BTX": get_btx, 				#Bitcore					#working
-		"BUM": get_bum, 				#Bitcoin Uranium			#no explorer
-		"CDY": get_cdy, 				#Bitcoin Candy (for of BCH)	#working
-		"FBTC": get_fbtc, 				#Bitcoin Fast				#no explorer
-		"GOD": get_god, 				#Bitcoin God				#no explorer
-		"LBTC": get_lbtc,				#Lightning Bitcoin			#manual
-		"OBTC": get_obtc,				#Oil Bitcoin				#no explorer
-		"NBTC": get_nbtc,				#New Bitcoin				#no explorer
-		"QBTC": get_qbtc,				#Quantum Bitcoin			#no explorer
-		"SUPERBTC": get_superbtc, 		#Super Bitcoin				#working
-		"UBTC": get_ubtc, 				#United Bitcoin				#manual
-		"WBTC": get_wbtc, 				#World Bitcoin				#working
-	}
+	global available_forks
+	available_forks = [
+	#0=working; 1=manual; 2=no explorer; 3= defenately dead
+	{"ticker": "ABTC", "function": get_abtc, "name": "A Bitcoin", "status" : 2, "CMC": "", "explorer" : "" },
+	{"ticker": "B2X", "function": get_b2x, "name": "Bitcoin Segwit2X", "status" : 0, "CMC": "segwit2x", "explorer" : "https://explorer.b2x-segwit.io" },
+	{"ticker": "BBC", "function": get_bbc, "name": "Big Bitcoin", "status" : 2, "CMC": "", "explorer" : "" },
+	{"ticker": "BCA", "function": get_bca, "name": "Bitcoin Atom", "status" : 1, "CMC": "", "explorer" : "https://bitcoinatom.net" },
+	{"ticker": "BCH", "function": get_bch, "name": "Bitcoin Cash", "status" : 0, "CMC": "bitcoin-cash", "explorer" : "https://bitcoincash.blockexplorer.com" },
+	{"ticker": "BCB", "function": get_bcb, "name": "Bitcoin Boy", "status" : 2, "CMC": "", "explorer" : "" },
+	{"ticker": "BCD", "function": get_bcd , "name": "Bitcoin Diamond", "status" : 1, "CMC": "", "explorer" : "http://explorer.btcd.io" },
+	{"ticker": "BCHC", "function": get_bchc, "name": "Bitcoin Clashic", "status" : 0, "CMC": "", "explorer" : "https://truevisionofsatoshi.com" },
+	{"ticker": "BCI", "function": get_bci, "name": "Bitcoin Intrest", "status" : 0, "CMC": "", "explorer" : "https://explorer.bitcoininterest.io" },
+	{"ticker": "BCK", "function": get_bck, "name": "Bitcoin King", "status" : 2, "CMC": "", "explorer" : "" },
+	{"ticker": "BCL", "function": get_bcl, "name": "Bitcoin Lunar", "status" : 2, "CMC": "", "explorer" : "" },
+	{"ticker": "BCL2", "function": get_bcl2, "name": "Bitcoin Classic", "status" : 2, "CMC": "", "explorer" : "" },
+	{"ticker": "BCM", "function": get_bcm, "name": "Bitcoin Master	", "status" : 2, "CMC": "", "explorer" : "" },
+	{"ticker": "BCO", "function": get_bco, "name": "Bitcoin Ore", "status" : 2, "CMC": "", "explorer" : "" },
+	{"ticker": "BCP", "function": get_bcp, "name": "Bitcoin Cash Plus", "status" :0 , "CMC": "", "explorer" : "http://www.bcpexp.org" },
+	{"ticker": "BCPC", "function": get_bcpc, "name": "Bitcoin Cash P", "status" :2 , "CMC": "", "explorer" : "" },
+	{"ticker": "BCS", "function": get_bcs, "name": "Bitcoin Smart", "status" : 2, "CMC": "", "explorer" : "" },
+	{"ticker": "BCS2", "function" : get_bcs2 , "name": "Bitcoin Sudu", "status" : 2, "CMC": "", "explorer" : "" },
+	{"ticker": "BCW", "function": get_bcw, "name": "Bitcoin Wonder", "status" : 2, "CMC": "", "explorer" : "" },
+	{"ticker": "BCX", "function": get_bcx, "name": "BitcoinX", "status" : 0, "CMC": "bitcoinx", "explorer" : "https://bcx.info" },
+	{"ticker": "BEC", "function": get_bec, "name": "Bitcoin ECO", "status" : 2 , "CMC": "", "explorer" : "" },
+	{"ticker": "BICC", "function": get_bicc, "name": "BitClassic", "status" : 0, "CMC": "", "explorer" : "http://18.216.251.169" },
+	{"ticker": "BIFI", "function": get_bifi, "name": "Bitcoin File", "status" : 2, "CMC": "", "explorer" : "" },
+	{"ticker": "BTCMI", "function": get_bitcoinminor, "name": "Bitcoin Minor", "status" : 2, "CMC": "", "explorer" : "" },
+	{"ticker": "BITE", "function": get_bite, "name": "BitEthereum", "status" : 2, "CMC": "", "explorer" : "" },
+	{"ticker": "BNR", "function": get_bnr, "name": "Bitcoin Neuro", "status" : 2, "CMC": "", "explorer" : "" },
+	{"ticker": "BPA", "function": get_bpa, "name": "Bitcoin Pizza", "status" : 0, "CMC": "", "explorer" : "http://47.100.55.227" },
+	{"ticker": "BTA", "function": get_bta, "name": "Bitcoin All", "status" : 2, "CMC": "", "explorer" : "" },
+	{"ticker": "BTC", "function": get_btc, "name": "Bitcoin", "status" : 0, "CMC": "bitcoin", "explorer" : "http://www.blockchain.info" },
+	{"ticker": "BTC2", "function": get_btc2, "name": "Bitcoin 2", "status" : 2, "CMC": "", "explorer" : "" },
+	{"ticker": "BTCH", "function": get_btch, "name": "Bitcoin Hush", "status" : 2, "CMC": "", "explorer" : "" },
+	{"ticker": "BTCL", "function": get_btcl, "name": "Bitcoin Lite", "status" : 2, "CMC": "", "explorer" : "" },
+	{"ticker": "BTCM", "function": get_btcm, "name": "Bitcoin Metal", "status" : 2, "CMC": "", "explorer" : "" },
+	{"ticker": "BTCP", "function": get_btcp, "name": "Bitcoin platinum", "status" : 2, "CMC": "", "explorer" : "" },
+	{"ticker": "BTCP2", "function": get_btcp2, "name": "Bitcoin Private", "status" :2 , "CMC": "", "explorer" : "" },
+	{"ticker": "BTCS", "function": get_btcs, "name": "Bitcoin Stake", "status" : 2, "CMC": "", "explorer" : "" },
+	{"ticker": "BTCTI", "function": get_btcti, "name": "BitcoinTI", "status" : 2, "CMC": "", "explorer" : "" },
+	{"ticker": "BTCV", "function": get_btcv, "name": "Bitcoin Blvck", "status" : 2, "CMC": "", "explorer" : "" },
+	{"ticker": "BTD", "function": get_btd, "name": "Bitcoin Dollar", "status" : 2, "CMC": "", "explorer" : "" },
+	{"ticker": "BTF", "function": get_btf, "name": "Bitcoin Faith", "status" : 2, "CMC": "", "explorer" : "" },
+	{"ticker": "BTG", "function": get_btg, "name": "Bitcoin Gold", "status" : 0, "CMC": "bitcoin-gold", "explorer" : "https://btgexplorer.com" },
+	{"ticker": "BTH", "function": get_bth, "name": "Bitcoin Hot", "status" : 2, "CMC": "", "explorer" : "" },
+	{"ticker": "BTN", "function": get_btn, "name": "Bitcoin New", "status" : 2, "CMC": "", "explorer" : "" },
+	{"ticker": "BTP", "function": get_btp, "name": "Bitcoin Pay", "status" : 2, "CMC": "", "explorer" : "" },
+	{"ticker": "BTP2", "function": get_btp2, "name": "Bitcoin Pro", "status" : 1, "CMC": "", "explorer" : "http://bitcoin-pool.de/explorer/BTP/" },
+	{"ticker": "BTR", "function": get_btr, "name": "Bitcoin Rhodium", "status" : 2, "CMC": "", "explorer" : "" },
+	{"ticker": "BTSQ", "function": get_btsq, "name": "Bitcoin Community", "status" : 2, "CMC": "", "explorer" : "" },
+	{"ticker": "BTT", "function": get_btt, "name": "Bitcoin Top", "status" : 2, "CMC": "", "explorer" : "" },
+	{"ticker": "BTV", "function": get_btv, "name": "BitVote", "status" : 0, "CMC": "", "explorer" : "https://block.bitvote.one" },
+	{"ticker": "BTW", "function": get_btw, "name": "Bitcoin World", "status" : 2, "CMC": "", "explorer" : "" },
+	{"ticker": "BTX", "function": get_btx, "name": "Bitcore", "status" : 0, "CMC": "bitcore", "explorer" : "https://chainz.cryptoid.info/btx/" },
+	{"ticker": "BUM", "function": get_bum, "name": "Bitcoin Uranium", "status" :2 , "CMC": "", "explorer" : "" },
+	{"ticker": "CDY", "function": get_cdy, "name": "Bitcoin Candy (fork of BCH)", "status" : 0 , "CMC": "", "explorer" : "http://block.cdy.one/" },
+	{"ticker": "FBTC", "function": get_fbtc, "name": "Bitcoin Fast", "status" : 2, "CMC": "", "explorer" : "" },
+	{"ticker": "GOD", "function": get_god, "name": "Bitcoin God", "status" : 2, "CMC": "", "explorer" : "" },
+	{"ticker": "LBTC", "function": get_lbtc, "name": "Lightning Bitcoin", "status" : 1, "CMC": "", "explorer" : "http://explorer.lbtc.io" },
+	{"ticker": "OBTC", "function": get_obtc, "name": "Oil Bitcoin", "status" :2 , "CMC": "", "explorer" : "" },
+	{"ticker": "NBTC", "function": get_nbtc, "name": "New Bitcoin", "status" : 2, "CMC": "", "explorer" : "" },
+	{"ticker": "QBTC", "function": get_qbtc, "name": "Quantum Bitcoin", "status" : 2 , "CMC": "", "explorer" : "" },
+	{"ticker": "SBTC", "function": get_superbtc, "name": "Super Bitcoin", "status" : 0, "CMC": "super-bitcoin", "explorer" : "http://block.superbtc.org" },
+	{"ticker": "UBTC", "function": get_ubtc, "name": "United Bitcoin	", "status" : 1, "CMC": "", "explorer" : "https://www.ub.com/explorer" },
+	{"ticker": "WBTC", "function": get_wbtc, "name": "World Bitcoin", "status" :0, "CMC": "", "explorer" : "http://142.44.242.32:3001" },
+	]
+	
+	global coinmarketcapdb
+	url = "https://api.coinmarketcap.com/v1/ticker/?limit=10000"
+	response = urllib.urlopen(url)
+	coinmarketcapdb = json.loads(response.read())
+	
+	global grandtotal
+	grandtotal = float(0)
+	
 	parser = argparse.ArgumentParser()
 	parser.add_argument("--address", help="query a single address")
 	parser.add_argument("--addressfile", help="query all addresses in this file")
@@ -80,6 +92,7 @@ def main():
 	parser.add_argument("--verbose", help="show all tests while they are running" , action='store_true')
 	parser.add_argument("--outfile", help="output to this file instead of stdout (screen)")
 	parser.add_argument("--timeout", help="number of seconds to wait between 2 requests", nargs='?', const=2, type=int)
+	parser.add_argument("--maximumstatus", help="maximumstatus 1 = only check chains that can be checked automatically; maximumstatus 2 = also print chains that have to checked manually: minmimstatus 3 = also print out chains that cannot be checked because they are dead or the absense of an explorer", type=int)
 	args = parser.parse_args()
 	global verbose
 	if args.verbose:
@@ -90,17 +103,16 @@ def main():
 		file = open(args.outfile, "w")
 		file.write("if you like this project, consider some of the \"free\" coins you got from these forks to me ;)\nBTC/BCH/BTX/B2X/...: 1MocACiWLM8bYn8pCrYjy6uHq4U3CkxLaa\nBTG: GeeXaL3TKCjtdFS78oCrPsFBkEFt9fxuZF\n\n")
 		file.close()
-	#	sys.stdout = open(args.outfile, 'w')
 
 	if args.showforks:
 		print "available forks:"
 		print "****************"
 		for printfork in available_forks:
-			print printfork
+			print printfork['ticker'] + "\tstatus: " + str(printfork['status'] + 1) + "\tfull name: " + str(printfork['name']) + "\t\texplorer: " + str(printfork['explorer'])
 		sys.exit("")
 
 	addresslist = []
-	forklist = []
+	forklist = {}
 	successes = []
 	untested = []
 	failed = []
@@ -115,20 +127,29 @@ def main():
 					addresslist.append(address.rstrip())
 	if len(addresslist) == 0:
 		sys.exit("no addresses available")
-		
-	if args.fork:
-		for forkname, forkfunction in available_forks.iteritems(): 
-			if forkname == args.fork:
-				forklist = {forkname:forkfunction}
 	else:
-		forklist = available_forks
+		print "testing " + str(len(addresslist)) + " addresses for unspent outputs"
+	if args.maximumstatus:
+		maximumstatus = args.maximumstatus
+	else:
+		maximumstatus = 4
+	if args.fork:
+		for currentfork in available_forks: 
+			if currentfork['ticker'] == args.fork:
+				forklist = {currentfork['ticker']:currentfork['function']}
+	else:
+		for currentfork in available_forks: 
+			if currentfork['status'] < maximumstatus:
+				forklist.update({currentfork['ticker']:currentfork['function']})
 		
 	if len(forklist) == 0:
 		sys.exit("no forks to check")
+	else:
+		print "testing " + str(len(forklist)) + " chains for unspent outputs"
 	if args.timeout:
 		timeout = args.timeout
 	else:
-		timeout = 2
+		timeout = 3
 	
 	if not verbose:
 		numberaddresses = len(addresslist)
@@ -148,10 +169,12 @@ def main():
 			if balance == -2:
 				failed.append("for some reason, address " + testaddress + " failed to be tested on " + testfork)
 			if balance > 0:
-				successes.append(testaddress + " has a balance of " + str(balance) + " on " + testfork)
+				price = trypricefetch(testfork, balance)
+				successes.append(testaddress + " has a balance of " + str(balance) + " on " + testfork + " " + price)
+				
 				if args.outfile:
 					file = open(args.outfile, "a")
-					file.write(testaddress + " has a balance of " + str(balance) + " on " + testfork + "\n")
+					file.write("[SUCCESS] " + testaddress + " has a balance of " + str(balance) + " on " + testfork + " " + price + "\n")
 					file.close()
 			time.sleep(timeout)
 	if not verbose:
@@ -221,8 +244,32 @@ def main():
 			file = open(args.outfile, "a")
 			file.write("\n\n-------------------------------------------------------------------------------------------\n| once again, if you import your private key into ANY unknown/untrusted wallet,           |\n| you risk losing your unspent outputs on all other chains!!!                             |\n| proceed with caution                                                                    |\n|*****************************************************************************************|\n| at least make sure your wallets on the most important chains are empty before importing |\n| their private keys into unknown wallets!!!                                              |\n-------------------------------------------------------------------------------------------\n\nif you like this project, consider some of the \"free\" coins you got from these forks to me ;)\nBTC/BCH/BTX/B2X/...: 1MocACiWLM8bYn8pCrYjy6uHq4U3CkxLaa\nBTG: GeeXaL3TKCjtdFS78oCrPsFBkEFt9fxuZF\n\n")
 			file.close()
-
+	
+	print "if you would exchange all coins right now, you'd make a whopping $" + str(grandtotal) 
+	if args.outfile:
+		file = open(args.outfile, "a")
+		file.write("if you would exchange all coins right now, you'd make a whopping $" + str(grandtotal) + "\n")
+		file.close()
+		
 ###############################################################################################	
+def trypricefetch(testfork, balance):
+	global grandtotal
+	cmc = ""
+	price = ". There is no linkt to coinmarketcap, so we can't find the price"
+	for currenttestfork in available_forks:
+		if currenttestfork['ticker'] == testfork:
+			cmc = currenttestfork['CMC']
+	if len(cmc) > 1:
+		found = 0
+		for coinmarketlisting in coinmarketcapdb:
+			if cmc == coinmarketlisting['id']:
+				found = 1
+				prijspercoin = coinmarketlisting['price_usd']
+				totaal = float(prijspercoin) * float(balance)
+				grandtotal = grandtotal + totaal
+				price = ". Coinmarketcap says this balance of " + str(balance) + str(testfork) + " is worth $" + str(prijspercoin) + " per coin. In your case this comes down to " + str(totaal) + "USD"
+	return price
+
 def veranderprefix(address, prefix):
 	try:
 		decoded = base58.b58decode_check(address)
@@ -453,7 +500,7 @@ def get_btc(address):
 	chain = "BTC"
 	if verbose:
 		print "\t checking address " + address + " on the " + chain + " chain"	
-	return fromchainz(address, 'https://chainz.cryptoid.info/btc/', chain)		
+	return frominsightapi(address, 'https://insight.bitpay.com/api/', chain)		
 		
 def get_bci(address):
 	chain = "BCI"
