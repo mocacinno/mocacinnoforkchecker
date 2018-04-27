@@ -113,6 +113,7 @@ def main():
 	parser.add_argument("--outfile", help="output to this file instead of stdout (screen)")
 	parser.add_argument("--timeout", help="number of seconds to wait between 2 requests", nargs='?', const=2, type=int)
 	parser.add_argument("--maximumstatus", help="maximumstatus 1 = only check chains that can be checked automatically; maximumstatus 2 = also print chains that have to checked manually: minmimstatus 3 = also print out chains that cannot be checked because they are dead or the absense of an explorer", type=int)
+	parser.add_argument("--skipbtc", help="don't check for unspent outputs on the BTC (original) chain", action='store_true')
 	args = parser.parse_args()
 	global verbose
 	if args.verbose:
@@ -156,7 +157,10 @@ def main():
 	if args.fork:
 		for currentfork in available_forks: 
 			if currentfork['ticker'] == args.fork:
-				forklist = {currentfork['ticker']:currentfork['function']}
+				if args.skipbtc and currentfork['ticker'] == "BTC":
+					print "didnt add BTC to the list of forks to check, since it was disabled by parameter skipbtc"
+				else:
+					forklist = {currentfork['ticker']:currentfork['function']}
 	else:
 		for currentfork in available_forks: 
 			if currentfork['status'] < maximumstatus:
