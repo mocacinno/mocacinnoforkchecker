@@ -7,7 +7,7 @@ If you want to run the script, i recommend:
  - Linux
  - python 2.7
  - pip
- - pip modules sys, argparse, requests, base58, time, urllib, urllib3, json, tqdm and cfscrape
+ - pip modules sys, argparse, requests, base58, time, urllib, urllib3, json, tqdm, signal and cfscrape
  - git
   
 **How to install the script**  
@@ -35,6 +35,7 @@ If you want to run the script, i recommend:
 | help | no | prints help about the parameters and exits |  
 | maximumstatus | no | only check forks with a status <= this parameter |  
 | outfile | no | print the output to this outfile |  
+| secperrequest | no | number of seconds to wait for a reply from the fork's block explorer. This number must be bigger than the (optional) timeout |  
 | showforks | no | show a list of supported forks and exit |  
 | skipbtc | no | do not check for unspent outputs on the original bitcoin chain |  
 | timeout | no | set the sleep() time to x seconds (default:3) |  
