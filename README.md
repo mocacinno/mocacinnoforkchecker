@@ -67,9 +67,10 @@ In order to add your coin to the script yourself, just add 1 line to the availab
 *Some of these coins don't have replay protection, some of these coins might only distribute binary wallets (or have open source wallets that weren't toroughly vetted by a competent community member). The first case can result in transactions being replaying on unintended chains, the second case can result in backdoors or bugs exposing your private keys to either the makers of the coin, or hackers exploiting the wallets... Always empty out your bitcoin wallet before attempting to import the private keys into wallets belonging to forked chains... Also try to claim the forks in order of importance (the most expensive forks first, the least expensive forks last)*  
   
 **tipjar(s)**  
-Since you can now claim a lot of coins on a lot of forks, you're in the ability to send me a tip (if you'd like)  
+Since you can now claim a lot of coins on a lot of forks, you're in the ability to send me a tip (if you'd like)
+
 | coin | address |  
-|--|--|  
+| --- | --- |  
 | BTC | 1MocACiWLM8bYn8pCrYjy6uHq4U3CkxLaa |  
 | BTC (segwit) | 3NMoA9R6dNDxV3dmnRRFqC44cW1PaDg5hs |  
 | BCH | 1MocACiWLM8bYn8pCrYjy6uHq4U3CkxLaa |  
