@@ -8,6 +8,7 @@ import urllib
 import json
 from tqdm import *
 import cfscrape
+import signal
 
 def main():
 	global available_forks
@@ -145,6 +146,7 @@ def main():
 	parser.add_argument("--verbose", help="show all tests while they are running" , action='store_true')
 	parser.add_argument("--outfile", help="output to this file instead of stdout (screen)")
 	parser.add_argument("--timeout", help="number of seconds to wait between 2 requests", nargs='?', const=2, type=int)
+	parser.add_argument("--secperrequest", help="if a fork check doesn't return an answer for this many seconds, skip the fork", nargs='?', const=30, type=int)
 	parser.add_argument("--maximumstatus", help="maximumstatus 1 = only check chains that can be checked automatically; maximumstatus 2 = also print chains that have to checked manually: minmimstatus 3 = also print out chains that cannot be checked because they are dead or the absense of an explorer", type=int)
 	parser.add_argument("--skipbtc", help="don't check for unspent outputs on the BTC (original) chain", action='store_true')
 	args = parser.parse_args()
@@ -164,7 +166,7 @@ def main():
 		for printfork in available_forks:
 			print printfork['ticker'] + "\tstatus: " + str(printfork['status'] + 1) + "\tfull name: " + str(printfork['name']) + "\t\texplorer: " + str(printfork['explorer'])
 		sys.exit("")
-
+	signal.signal(signal.SIGALRM, handler)
 	addresslist = []
 	forklist = {}
 	successes = []
@@ -187,6 +189,10 @@ def main():
 		maximumstatus = args.maximumstatus
 	else:
 		maximumstatus = 4
+	if args.secperrequest:
+		secperrequest = args.secperrequest
+	else:
+		secperrequest = 30
 	if args.fork:
 		for currentfork in available_forks: 
 			if currentfork['ticker'] == args.fork:
@@ -215,6 +221,7 @@ def main():
 		pbar = tqdm(total=product, unit='forks', ascii=True)
 	for testaddress in addresslist:
 		for testfork in forklist:
+			signal.alarm(secperrequest)
 			if verbose:
 				print "testing " + testaddress + " on " + testfork
 			if not verbose:
@@ -241,6 +248,7 @@ def main():
 					file.write("[SUCCESS] " + testaddress + " has a balance of " + str(balance) + " on " + testfork + " " + price + "\n")
 					file.close()
 			time.sleep(timeout)
+			signal.alarm(0)
 	if not verbose:
 		pbar.close()
 	if len(failed) > 0:
@@ -355,7 +363,10 @@ def getbitcoincashprice():
 					return coinmarketlisting['price_usd']
 	except:
 		print "bitcoin cash price could not be fetched from coinmarketcap"
-		
+
+def handler(signum, frame):
+    print 'Signal handler called with signal', signum
+	
 def trypricefetch(testfork, balance):
 	global grandtotal
 	cmc = ""
