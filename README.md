@@ -1,9 +1,9 @@
-﻿**Introduction**
-I was searching for a tool to check my unspent outputs on all different altcoins that recently forked  from bitcoin at a certain heigh, and whose unspent outputs could be spent by using my private keys... I found several tools, like [https://github.com/foozzi/bitcoin-fork-checker](https://github.com/foozzi/bitcoin-fork-checker), but i found them either lacking basic functionality, unmaintained or lacking a lot of the current forks. This is why i decided to write my own script.
-
-**Prereqs**
-If you want to run the script, i recommend:
-
+﻿**Introduction**  
+I was searching for a tool to check my unspent outputs on all different altcoins that recently forked  from bitcoin at a certain heigh, and whose unspent outputs could be spent by using my private keys... I found several tools, like [https://github.com/foozzi/bitcoin-fork-checker](https://github.com/foozzi/bitcoin-fork-checker), but i found them either lacking basic functionality, unmaintained or lacking a lot of the current forks. This is why i decided to write my own script.  
+  
+**Prereqs**  
+If you want to run the script, i recommend:  
+  
  - Linux
  - python 2.7
  - pip
