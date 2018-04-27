@@ -26,13 +26,9 @@ If you want to run the script, i recommend:
  - ./checker --help
   
 **Parameters**  
-| test | test2 | test 3 |
-| --- | --- | --- |
-| bml | test2 | test 3 |
-
   
 | parameter | mandatory?  | explanation |  
-|----|----|----|  
+| ---- | ---- | ---- |  
 | address | yes* | check one single address |  
 | addressfile | yes* | check all addresses in this ascii file |  
 | fork | no | only check this fork |  
