@@ -33,12 +33,12 @@ def main():
 	{"ticker": "BCW",	"function": get_bcw, 			"name": "Bitcoin Wonder", 				"status": 2, 	"CMC": "", 					"explorer": "" },
 	{"ticker": "BCX",	"function": get_bcx, 			"name": "BitcoinX", 					"status": 0, 	"CMC": "cmc:bitcoinx", 		"explorer": "https://bcx.info" },
 	{"ticker": "BEC",	"function": get_bec, 			"name": "Bitcoin ECO", 					"status": 2, 	"CMC": "", 					"explorer": "" },
-	{"ticker": "BICC",	"function": get_bicc, 			"name": "BitClassic", 					"status": 0, 	"CMC": "none:none", 		"explorer": "http://18.216.251.169" },
+	{"ticker": "BICC",	"function": get_bicc, 			"name": "BitClassic", 					"status": 0, 	"CMC": "topbtc:none", 		"explorer": "http://18.216.251.169" },
 	{"ticker": "BIFI",	"function": get_bifi, 			"name": "Bitcoin File", 				"status": 2, 	"CMC": "", 					"explorer": "" },
 	{"ticker": "BTCMI",	"function": get_bitcoinminor, 	"name": "Bitcoin Minor", 				"status": 2, 	"CMC": "", 					"explorer": "" },
 	{"ticker": "BITE",	"function": get_bite, 			"name": "BitEthereum", 					"status": 2, 	"CMC": "", 					"explorer": "" },
 	{"ticker": "BNR",	"function": get_bnr, 			"name": "Bitcoin Neuro", 				"status": 2, 	"CMC": "", 					"explorer": "" },
-	{"ticker": "BPA",	"function": get_bpa, 			"name": "Bitcoin Pizza", 				"status": 0, 	"CMC": "none:none", 		"explorer": "http://47.100.55.227" },
+	{"ticker": "BPA",	"function": get_bpa, 			"name": "Bitcoin Pizza", 				"status": 0, 	"CMC": "hbtop:none", 		"explorer": "http://47.100.55.227" },
 	{"ticker": "BTA",	"function": get_bta, 			"name": "Bitcoin All", 					"status": 2, 	"CMC": "", 					"explorer": "" },
 	{"ticker": "BTC",	"function": get_btc, 			"name": "Bitcoin", 						"status": 0, 	"CMC": "cmc:bitcoin", 		"explorer": "http://www.blockchain.info" },
 	{"ticker": "BTC2",	"function": get_btc2, 			"name": "Bitcoin 2", 					"status": 2, 	"CMC": "", 					"explorer": "" },
@@ -64,7 +64,7 @@ def main():
 	{"ticker": "BTW",	"function": get_btw,			"name": "Bitcoin World", 				"status": 2, 	"CMC": "", 					"explorer": "" },
 	{"ticker": "BTX",	"function": get_btx,			"name": "Bitcore", 						"status": 0, 	"CMC": "cmc:bitcore", 		"explorer": "https://chainz.cryptoid.info/btx/" },
 	{"ticker": "BUM",	"function": get_bum,			"name": "Bitcoin Uranium", 				"status": 2, 	"CMC": "", 					"explorer": "" },
-	{"ticker": "CDY",	"function": get_cdy,			"name": "Bitcoin Candy (fork of BCH)", 	"status": 0, 	"CMC": "none:none", 		"explorer": "http://block.cdy.one/" },
+	{"ticker": "CDY",	"function": get_cdy,			"name": "Bitcoin Candy (fork of BCH)", 	"status": 0, 	"CMC": "coinex:CDYBCH",		"explorer": "http://block.cdy.one/" },
 	{"ticker": "FBTC",	"function": get_fbtc,			"name": "Bitcoin Fast", 				"status": 2, 	"CMC": "", 					"explorer": "" },
 	{"ticker": "GOD",	"function": get_god,			"name": "Bitcoin God", 					"status": 2, 	"CMC": "", 					"explorer": "" },
 	{"ticker": "LBTC",	"function": get_lbtc,			"name": "Lightning Bitcoin", 			"status": 1, 	"CMC": "", 					"explorer": "http://explorer.lbtc.io" },
@@ -77,32 +77,65 @@ def main():
 	]
 	
 	global coinmarketcapdb
-	url = "https://api.coinmarketcap.com/v1/ticker/?limit=10000"
-	response = urllib.urlopen(url)
-	coinmarketcapdb = json.loads(response.read())
+	try:
+		url = "https://api.coinmarketcap.com/v1/ticker/?limit=10000"
+		response = urllib.urlopen(url)
+		coinmarketcapdb = json.loads(response.read())
+	except:
+		print "problem loading the tickers from coinmarketcap"
 	
 	global yobitdb
-	loadyobit()
+	try:
+		loadyobit()
+	except:
+		print "problem loading the tickers from yobit"
 	
 	global bisqdb
-	url = "https://markets.bisq.network/api/ticker"
-	response = urllib.urlopen(url)
-	bisqdb = json.loads(response.read())
+	try:
+		url = "https://markets.bisq.network/api/ticker"
+		response = urllib.urlopen(url)
+		bisqdb = json.loads(response.read())
+	except:
+		print "problem loading the tickers from bisq"
 	
 	global tradesatoshidb
-	url = "https://tradesatoshi.com/api/public/getmarketsummaries"
-	response = urllib.urlopen(url)
-	scraper = cfscrape.create_scraper()
-	response = scraper.get(url).content
-	tradesatoshidb = json.loads(response)
-	tradesatoshidb = tradesatoshidb['result']
-	
+	try:
+		url = "https://tradesatoshi.com/api/public/getmarketsummaries"
+		response = urllib.urlopen(url)
+		scraper = cfscrape.create_scraper()
+		response = scraper.get(url).content
+		tradesatoshidb = json.loads(response)
+		tradesatoshidb = tradesatoshidb['result']
+	except:
+		print "problem loading the tickers from tradesatoshi"
+		
+	global coinexdb
+	try:
+		url = "https://api.coinex.com/v1/market/ticker/all"
+		response = urllib.urlopen(url)
+		coinexdb = json.loads(response.read())
+		coinexdb = coinexdb['data']['ticker']
+	except:
+		print "problem loading the tickers from coinexdb"
+		
 	global grandtotal
 	grandtotal = float(0)
 	
 	global bitcoinprice
-	bitcoinprice = float(getbitcoinprice())
-	print "current BTC price in USD according to coinmarketcap: $" + str(bitcoinprice)
+	try:
+		bitcoinprice = float(getbitcoinprice())
+		print "current BTC price in USD according to coinmarketcap: $" + str(bitcoinprice)
+	except:
+		bitcoinprice = float(9000)
+		print "i was unable to load the BTC price, so i took the estimation of the end of may 2018: $9000/BTC"
+		
+	global bitcoincashprice
+	try:
+		bitcoincashprice = float(getbitcoincashprice())
+		print "current BCH price in USD according to coinmarketcap: $" + str(bitcoincashprice)
+	except:
+		bitcoincashprice = float(1000)
+		print "i was unable to load the BCH price, so i took the estimation of the end of may 2018: $1000/BCH"
 	
 	parser = argparse.ArgumentParser()
 	parser.add_argument("--address", help="query a single address")
@@ -186,15 +219,22 @@ def main():
 				print "testing " + testaddress + " on " + testfork
 			if not verbose:
 				pbar.update(1)
-			func = forklist.get(testfork, lambda: "Wrong fork")
-			balance = func(testaddress)
+			try:
+				func = forklist.get(testfork, lambda: "Wrong fork")
+				balance = func(testaddress)
+			except:
+				print "[ERROR] while testing " + testaddress + " on " + testfork
+				balance = -2
 			if balance == -1:
 				untested.append("for some reason, address " + testaddress + " was not tested on " + testfork)
 			if balance == -2:
 				failed.append("for some reason, address " + testaddress + " failed to be tested on " + testfork)
 			if balance > 0:
-				price = trypricefetch(testfork, balance)
-				successes.append(testaddress + " has a balance of " + str(balance) + " on " + testfork + " " + price)
+				try:
+					price = trypricefetch(testfork, balance)
+				except:
+					price = " something went wrong while fetching the FIAT price"
+				successes.append(testaddress + " has a balance of " + str(balance) + " on " + testfork + " " + str(price))
 				
 				if args.outfile:
 					file = open(args.outfile, "a")
@@ -278,30 +318,44 @@ def main():
 ###############################################################################################	
 def loadyobit():
 	global yobitdb
-	parameters = ""
-	eerste = 0
-	for currenttestfork in available_forks:
-		cmc = currenttestfork['CMC']
-		if len(cmc) > 2:
-			split = cmc.split(":")
-			cmc = split[1]
-			type = split[0]
-			if type == "yobit":
-				if eerste == 0:
-					eerste = 1
-					parameters = cmc
-				else:
-					parameters = parameters + "-" + cmc
-	url = "https://yobit.net/api/3/ticker/" + parameters
-	scraper = cfscrape.create_scraper()
-	response = scraper.get(url).content
-	yobitdb = json.loads(response)
+	try:
+		parameters = ""
+		eerste = 0
+		for currenttestfork in available_forks:
+			cmc = currenttestfork['CMC']
+			if len(cmc) > 2:
+				split = cmc.split(":")
+				cmc = split[1]
+				type = split[0]
+				if type == "yobit":
+					if eerste == 0:
+						eerste = 1
+						parameters = cmc
+					else:
+						parameters = parameters + "-" + cmc
+		url = "https://yobit.net/api/3/ticker/" + parameters
+		scraper = cfscrape.create_scraper()
+		response = scraper.get(url).content
+		yobitdb = json.loads(response)
+	except:
+		print "yobit api could not be reached"
 
 def getbitcoinprice():
-	for coinmarketlisting in coinmarketcapdb:
-			if coinmarketlisting['id'] == 'bitcoin':
-				return coinmarketlisting['price_usd']
-
+	try:
+		for coinmarketlisting in coinmarketcapdb:
+				if coinmarketlisting['id'] == 'bitcoin':
+					return coinmarketlisting['price_usd']
+	except:
+		print "bitcoinprice could not be fetched from coinmarketcap"
+		
+def getbitcoincashprice():
+	try:
+		for coinmarketlisting in coinmarketcapdb:
+				if coinmarketlisting['id'] == 'bitcoin-cash':
+					return coinmarketlisting['price_usd']
+	except:
+		print "bitcoin cash price could not be fetched from coinmarketcap"
+		
 def trypricefetch(testfork, balance):
 	global grandtotal
 	cmc = ""
@@ -342,6 +396,14 @@ def trypricefetch(testfork, balance):
 				totaal = prijspercoin * float(balance)
 				grandtotal = grandtotal + totaal
 				price = ". Tradesatoshi says this balance of " + str(balance) + str(testfork) + " is worth $" + str(prijspercoin) + " per coin. In your case this comes down to " + str(totaal) + "USD"
+	if type == "coinex":
+		for coinexticker, coinexlisting in coinexdb.items():
+			if cmc == coinexticker:
+				bchprijspercoin = coinexlisting['last']
+				prijspercoin = float(bchprijspercoin) * bitcoincashprice
+				totaal = prijspercoin * float(balance)
+				grandtotal = grandtotal + totaal
+				price = ". coinex says this balance of " + str(balance) + str(testfork) + " is worth $" + str(prijspercoin) + " per coin. In your case this comes down to " + str(totaal) + "USD"
 	return price
 
 def veranderprefix(address, prefix):
