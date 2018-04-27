@@ -7,6 +7,7 @@ import urllib3
 import urllib
 import json
 from tqdm import *
+import cfscrape
 
 def main():
 	global available_forks
@@ -19,26 +20,26 @@ def main():
 	{"ticker": "BCH",	"function": get_bch, 			"name": "Bitcoin Cash", 				"status": 0, 	"CMC": "cmc:bitcoin-cash", 	"explorer": "https://bitcoincash.blockexplorer.com" },
 	{"ticker": "BCB",	"function": get_bcb, 			"name": "Bitcoin Boy", 					"status": 2, 	"CMC": "", 					"explorer": "" },
 	{"ticker": "BCD",	"function": get_bcd , 			"name": "Bitcoin Diamond", 				"status": 1, 	"CMC": "", 					"explorer": "http://explorer.btcd.io" },
-	{"ticker": "BCHC",	"function": get_bchc, 			"name": "Bitcoin Clashic", 				"status": 0, 	"CMC": "", 					"explorer": "https://truevisionofsatoshi.com" },
-	{"ticker": "BCI",	"function": get_bci, 			"name": "Bitcoin Intrest", 				"status": 0, 	"CMC": "", 					"explorer": "https://explorer.bitcoininterest.io" },
+	#{"ticker": "BCHC",	"function": get_bchc, 			"name": "Bitcoin Clashic", 				"status": 0, 	"CMC": "", 					"explorer": "https://truevisionofsatoshi.com" },
+	#{"ticker": "BCI",	"function": get_bci, 			"name": "Bitcoin Intrest", 				"status": 0, 	"CMC": "", 					"explorer": "https://explorer.bitcoininterest.io" },
 	{"ticker": "BCK",	"function": get_bck, 			"name": "Bitcoin King", 				"status": 2, 	"CMC": "", 					"explorer": "" },
 	{"ticker": "BCL",	"function": get_bcl, 			"name": "Bitcoin Lunar", 				"status": 2, 	"CMC": "", 					"explorer": "" },
 	{"ticker": "BCL2",	"function": get_bcl2, 			"name": "Bitcoin Classic", 				"status": 2, 	"CMC": "", 					"explorer": "" },
 	{"ticker": "BCM",	"function": get_bcm, 			"name": "Bitcoin Master	", 				"status": 2, 	"CMC": "", 					"explorer": "" },
 	{"ticker": "BCO",	"function": get_bco, 			"name": "Bitcoin Ore", 					"status": 2, 	"CMC": "", 					"explorer": "" },
-	{"ticker": "BCP",	"function": get_bcp, 			"name": "Bitcoin Cash Plus", 			"status": 0, 	"CMC": "", 					"explorer": "http://www.bcpexp.org" },
+	{"ticker": "BCP",	"function": get_bcp, 			"name": "Bitcoin Cash Plus", 			"status": 0, 	"CMC": "yobit:bcp_usd", 	"explorer": "http://www.bcpexp.org" },
 	{"ticker": "BCPC",	"function": get_bcpc, 			"name": "Bitcoin Cash P", 				"status": 2,	"CMC": "", 					"explorer": "" },
 	{"ticker": "BCS",	"function": get_bcs, 			"name": "Bitcoin Smart", 				"status": 2, 	"CMC": "", 					"explorer": "" },
 	{"ticker": "BCS2",	"function": get_bcs2 , 			"name": "Bitcoin Sudu", 				"status": 2, 	"CMC": "", 					"explorer": "" },
 	{"ticker": "BCW",	"function": get_bcw, 			"name": "Bitcoin Wonder", 				"status": 2, 	"CMC": "", 					"explorer": "" },
 	{"ticker": "BCX",	"function": get_bcx, 			"name": "BitcoinX", 					"status": 0, 	"CMC": "cmc:bitcoinx", 		"explorer": "https://bcx.info" },
 	{"ticker": "BEC",	"function": get_bec, 			"name": "Bitcoin ECO", 					"status": 2, 	"CMC": "", 					"explorer": "" },
-	{"ticker": "BICC",	"function": get_bicc, 			"name": "BitClassic", 					"status": 0, 	"CMC": "", 					"explorer": "http://18.216.251.169" },
+	#{"ticker": "BICC",	"function": get_bicc, 			"name": "BitClassic", 					"status": 0, 	"CMC": "", 					"explorer": "http://18.216.251.169" },
 	{"ticker": "BIFI",	"function": get_bifi, 			"name": "Bitcoin File", 				"status": 2, 	"CMC": "", 					"explorer": "" },
 	{"ticker": "BTCMI",	"function": get_bitcoinminor, 	"name": "Bitcoin Minor", 				"status": 2, 	"CMC": "", 					"explorer": "" },
 	{"ticker": "BITE",	"function": get_bite, 			"name": "BitEthereum", 					"status": 2, 	"CMC": "", 					"explorer": "" },
 	{"ticker": "BNR",	"function": get_bnr, 			"name": "Bitcoin Neuro", 				"status": 2, 	"CMC": "", 					"explorer": "" },
-	{"ticker": "BPA",	"function": get_bpa, 			"name": "Bitcoin Pizza", 				"status": 0, 	"CMC": "", 					"explorer": "http://47.100.55.227" },
+	#{"ticker": "BPA",	"function": get_bpa, 			"name": "Bitcoin Pizza", 				"status": 0, 	"CMC": "", 					"explorer": "http://47.100.55.227" },
 	{"ticker": "BTA",	"function": get_bta, 			"name": "Bitcoin All", 					"status": 2, 	"CMC": "", 					"explorer": "" },
 	{"ticker": "BTC",	"function": get_btc, 			"name": "Bitcoin", 						"status": 0, 	"CMC": "cmc:bitcoin", 		"explorer": "http://www.blockchain.info" },
 	{"ticker": "BTC2",	"function": get_btc2, 			"name": "Bitcoin 2", 					"status": 2, 	"CMC": "", 					"explorer": "" },
@@ -60,11 +61,11 @@ def main():
 	{"ticker": "BTR",	"function": get_btr, 			"name": "Bitcoin Rhodium", 				"status": 2, 	"CMC": "", 					"explorer": "" },
 	{"ticker": "BTSQ",	"function": get_btsq, 			"name": "Bitcoin Community", 			"status": 2, 	"CMC": "", 					"explorer": "" },
 	{"ticker": "BTT",	"function": get_btt,			"name": "Bitcoin Top", 					"status": 2, 	"CMC": "", 					"explorer": "" },
-	{"ticker": "BTV",	"function": get_btv,			"name": "BitVote", 						"status": 0, 	"CMC": "", 					"explorer": "https://block.bitvote.one" },
+	{"ticker": "BTV",	"function": get_btv,			"name": "BitVote", 						"status": 0, 	"CMC": "yobit:btv_usd", 					"explorer": "https://block.bitvote.one" },
 	{"ticker": "BTW",	"function": get_btw,			"name": "Bitcoin World", 				"status": 2, 	"CMC": "", 					"explorer": "" },
 	{"ticker": "BTX",	"function": get_btx,			"name": "Bitcore", 						"status": 0, 	"CMC": "cmc:bitcore", 		"explorer": "https://chainz.cryptoid.info/btx/" },
 	{"ticker": "BUM",	"function": get_bum,			"name": "Bitcoin Uranium", 				"status": 2, 	"CMC": "", 					"explorer": "" },
-	{"ticker": "CDY",	"function": get_cdy,			"name": "Bitcoin Candy (fork of BCH)", 	"status": 0, 	"CMC": "", 					"explorer": "http://block.cdy.one/" },
+	#{"ticker": "CDY",	"function": get_cdy,			"name": "Bitcoin Candy (fork of BCH)", 	"status": 0, 	"CMC": "", 					"explorer": "http://block.cdy.one/" },
 	{"ticker": "FBTC",	"function": get_fbtc,			"name": "Bitcoin Fast", 				"status": 2, 	"CMC": "", 					"explorer": "" },
 	{"ticker": "GOD",	"function": get_god,			"name": "Bitcoin God", 					"status": 2, 	"CMC": "", 					"explorer": "" },
 	{"ticker": "LBTC",	"function": get_lbtc,			"name": "Lightning Bitcoin", 			"status": 1, 	"CMC": "", 					"explorer": "http://explorer.lbtc.io" },
@@ -73,7 +74,7 @@ def main():
 	{"ticker": "QBTC",	"function": get_qbtc,			"name": "Quantum Bitcoin", 				"status": 2, 	"CMC": "", 					"explorer": "" },
 	{"ticker": "SBTC",	"function": get_superbtc,		"name": "Super Bitcoin", 				"status": 0, 	"CMC": "cmc:super-bitcoin",	"explorer": "http://block.superbtc.org" },
 	{"ticker": "UBTC",	"function": get_ubtc,			"name": "United Bitcoin	", 				"status": 1, 	"CMC": "", 					"explorer": "https://www.ub.com/explorer" },
-	{"ticker": "WBTC",	"function": get_wbtc,			"name": "World Bitcoin", 				"status": 0, 	"CMC": "", 					"explorer": "http://142.44.242.32:3001" },
+	#{"ticker": "WBTC",	"function": get_wbtc,			"name": "World Bitcoin", 				"status": 0, 	"CMC": "", 					"explorer": "http://142.44.242.32:3001" },
 	]
 	
 	global coinmarketcapdb
@@ -81,8 +82,15 @@ def main():
 	response = urllib.urlopen(url)
 	coinmarketcapdb = json.loads(response.read())
 	
+	global yobitdb
+	loadyobit()
+	
 	global grandtotal
 	grandtotal = float(0)
+	
+	global bitcoinprice
+	bitcoinprice = float(getbitcoinprice())
+	print "current BTC price in USD according to coinmarketcap: $" + str(bitcoinprice)
 	
 	parser = argparse.ArgumentParser()
 	parser.add_argument("--address", help="query a single address")
@@ -252,6 +260,32 @@ def main():
 		file.close()
 		
 ###############################################################################################	
+def loadyobit():
+	global yobitdb
+	parameters = ""
+	eerste = 0
+	for currenttestfork in available_forks:
+		cmc = currenttestfork['CMC']
+		if len(cmc) > 2:
+			split = cmc.split(":")
+			cmc = split[1]
+			type = split[0]
+			if type == "yobit":
+				if eerste == 0:
+					eerste = 1
+					parameters = cmc
+				else:
+					parameters = parameters + "-" + cmc
+	url = "https://yobit.net/api/3/ticker/" + parameters
+	scraper = cfscrape.create_scraper()
+	response = scraper.get(url).content
+	yobitdb = json.loads(response)
+
+def getbitcoinprice():
+	for coinmarketlisting in coinmarketcapdb:
+			if coinmarketlisting['id'] == 'bitcoin':
+				return coinmarketlisting['price_usd']
+
 def trypricefetch(testfork, balance):
 	global grandtotal
 	cmc = ""
@@ -264,14 +298,19 @@ def trypricefetch(testfork, balance):
 			cmc = split[1]
 			type = split[0]
 	if type == "cmc" :
-		found = 0
 		for coinmarketlisting in coinmarketcapdb:
 			if cmc == coinmarketlisting['id']:
-				found = 1
 				prijspercoin = coinmarketlisting['price_usd']
 				totaal = float(prijspercoin) * float(balance)
 				grandtotal = grandtotal + totaal
 				price = ". Coinmarketcap says this balance of " + str(balance) + str(testfork) + " is worth $" + str(prijspercoin) + " per coin. In your case this comes down to " + str(totaal) + "USD"
+	if type == "yobit":
+		for yobitlistingticker, yobitlistinginfo in yobitdb.items():
+			if cmc == yobitlistingticker:
+				prijspercoin = yobitlistinginfo['avg']
+				totaal = float(prijspercoin) * float(balance)
+				grandtotal = grandtotal + totaal
+				price = ". Yobit says this balance of " + str(balance) + str(testfork) + " is worth $" + str(prijspercoin) + " per coin. In your case this comes down to " + str(totaal) + "USD"
 	return price
 
 def veranderprefix(address, prefix):
@@ -282,7 +321,6 @@ def veranderprefix(address, prefix):
 		newaddress = base58.b58encode_check(bytes(decoded))
 		return newaddress
 	except:
-		#print "[ERR] could not convert address " + str(address) + " using prefix " + str(prefix)
 		return address
 
 		
