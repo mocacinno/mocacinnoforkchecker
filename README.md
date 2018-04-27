@@ -27,7 +27,7 @@ If you want to run the script, i recommend:
   
 **Parameters**  
 | parameter | mandatory?  | explanation |  
-|--|--|--|  
+|----|----|----|  
 | address | yes* | check one single address |  
 | addressfile | yes* | check all addresses in this ascii file |  
 | fork | no | only check this fork |  
