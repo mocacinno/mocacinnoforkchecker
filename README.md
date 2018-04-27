@@ -39,6 +39,7 @@ If you want to run the script, i recommend:
 | skipbtc | no | do not check for unspent outputs on the original bitcoin chain |  
 | timeout | no | set the sleep() time to x seconds (default:3) |  
 | verbose | no | write all output to stdout, disables the progress bar |  
+  
 \* either the address OR the addressfile parameter have to be used... This is the only mandatory parameter. If you use BOTH the address AND the addressfile, a union will be executed, duplicate lines will be checked twice  
    
  **examples**  
