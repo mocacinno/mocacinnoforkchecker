@@ -13,10 +13,10 @@ def main():
 	available_forks = [
 	#0=working; 1=manual; 2=no explorer; 3= defenately dead
 	{"ticker": "ABTC", "function": get_abtc, "name": "A Bitcoin", "status" : 2, "CMC": "", "explorer" : "" },
-	{"ticker": "B2X", "function": get_b2x, "name": "Bitcoin Segwit2X", "status" : 0, "CMC": "segwit2x", "explorer" : "https://explorer.b2x-segwit.io" },
+	{"ticker": "B2X", "function": get_b2x, "name": "Bitcoin Segwit2X", "status" : 0, "CMC": "cmc:segwit2x", "explorer" : "https://explorer.b2x-segwit.io" },
 	{"ticker": "BBC", "function": get_bbc, "name": "Big Bitcoin", "status" : 2, "CMC": "", "explorer" : "" },
 	{"ticker": "BCA", "function": get_bca, "name": "Bitcoin Atom", "status" : 1, "CMC": "", "explorer" : "https://bitcoinatom.net" },
-	{"ticker": "BCH", "function": get_bch, "name": "Bitcoin Cash", "status" : 0, "CMC": "bitcoin-cash", "explorer" : "https://bitcoincash.blockexplorer.com" },
+	{"ticker": "BCH", "function": get_bch, "name": "Bitcoin Cash", "status" : 0, "CMC": "cmc:bitcoin-cash", "explorer" : "https://bitcoincash.blockexplorer.com" },
 	{"ticker": "BCB", "function": get_bcb, "name": "Bitcoin Boy", "status" : 2, "CMC": "", "explorer" : "" },
 	{"ticker": "BCD", "function": get_bcd , "name": "Bitcoin Diamond", "status" : 1, "CMC": "", "explorer" : "http://explorer.btcd.io" },
 	{"ticker": "BCHC", "function": get_bchc, "name": "Bitcoin Clashic", "status" : 0, "CMC": "", "explorer" : "https://truevisionofsatoshi.com" },
@@ -31,7 +31,7 @@ def main():
 	{"ticker": "BCS", "function": get_bcs, "name": "Bitcoin Smart", "status" : 2, "CMC": "", "explorer" : "" },
 	{"ticker": "BCS2", "function" : get_bcs2 , "name": "Bitcoin Sudu", "status" : 2, "CMC": "", "explorer" : "" },
 	{"ticker": "BCW", "function": get_bcw, "name": "Bitcoin Wonder", "status" : 2, "CMC": "", "explorer" : "" },
-	{"ticker": "BCX", "function": get_bcx, "name": "BitcoinX", "status" : 0, "CMC": "bitcoinx", "explorer" : "https://bcx.info" },
+	{"ticker": "BCX", "function": get_bcx, "name": "BitcoinX", "status" : 0, "CMC": "cmc:bitcoinx", "explorer" : "https://bcx.info" },
 	{"ticker": "BEC", "function": get_bec, "name": "Bitcoin ECO", "status" : 2 , "CMC": "", "explorer" : "" },
 	{"ticker": "BICC", "function": get_bicc, "name": "BitClassic", "status" : 0, "CMC": "", "explorer" : "http://18.216.251.169" },
 	{"ticker": "BIFI", "function": get_bifi, "name": "Bitcoin File", "status" : 2, "CMC": "", "explorer" : "" },
@@ -40,7 +40,7 @@ def main():
 	{"ticker": "BNR", "function": get_bnr, "name": "Bitcoin Neuro", "status" : 2, "CMC": "", "explorer" : "" },
 	{"ticker": "BPA", "function": get_bpa, "name": "Bitcoin Pizza", "status" : 0, "CMC": "", "explorer" : "http://47.100.55.227" },
 	{"ticker": "BTA", "function": get_bta, "name": "Bitcoin All", "status" : 2, "CMC": "", "explorer" : "" },
-	{"ticker": "BTC", "function": get_btc, "name": "Bitcoin", "status" : 0, "CMC": "bitcoin", "explorer" : "http://www.blockchain.info" },
+	{"ticker": "BTC", "function": get_btc, "name": "Bitcoin", "status" : 0, "CMC": "cmc:bitcoin", "explorer" : "http://www.blockchain.info" },
 	{"ticker": "BTC2", "function": get_btc2, "name": "Bitcoin 2", "status" : 2, "CMC": "", "explorer" : "" },
 	{"ticker": "BTCH", "function": get_btch, "name": "Bitcoin Hush", "status" : 2, "CMC": "", "explorer" : "" },
 	{"ticker": "BTCL", "function": get_btcl, "name": "Bitcoin Lite", "status" : 2, "CMC": "", "explorer" : "" },
@@ -52,7 +52,7 @@ def main():
 	{"ticker": "BTCV", "function": get_btcv, "name": "Bitcoin Blvck", "status" : 2, "CMC": "", "explorer" : "" },
 	{"ticker": "BTD", "function": get_btd, "name": "Bitcoin Dollar", "status" : 2, "CMC": "", "explorer" : "" },
 	{"ticker": "BTF", "function": get_btf, "name": "Bitcoin Faith", "status" : 2, "CMC": "", "explorer" : "" },
-	{"ticker": "BTG", "function": get_btg, "name": "Bitcoin Gold", "status" : 0, "CMC": "bitcoin-gold", "explorer" : "https://btgexplorer.com" },
+	{"ticker": "BTG", "function": get_btg, "name": "Bitcoin Gold", "status" : 0, "CMC": "cmc:bitcoin-gold", "explorer" : "https://btgexplorer.com" },
 	{"ticker": "BTH", "function": get_bth, "name": "Bitcoin Hot", "status" : 2, "CMC": "", "explorer" : "" },
 	{"ticker": "BTN", "function": get_btn, "name": "Bitcoin New", "status" : 2, "CMC": "", "explorer" : "" },
 	{"ticker": "BTP", "function": get_btp, "name": "Bitcoin Pay", "status" : 2, "CMC": "", "explorer" : "" },
@@ -62,7 +62,7 @@ def main():
 	{"ticker": "BTT", "function": get_btt, "name": "Bitcoin Top", "status" : 2, "CMC": "", "explorer" : "" },
 	{"ticker": "BTV", "function": get_btv, "name": "BitVote", "status" : 0, "CMC": "", "explorer" : "https://block.bitvote.one" },
 	{"ticker": "BTW", "function": get_btw, "name": "Bitcoin World", "status" : 2, "CMC": "", "explorer" : "" },
-	{"ticker": "BTX", "function": get_btx, "name": "Bitcore", "status" : 0, "CMC": "bitcore", "explorer" : "https://chainz.cryptoid.info/btx/" },
+	{"ticker": "BTX", "function": get_btx, "name": "Bitcore", "status" : 0, "CMC": "cmc:bitcore", "explorer" : "https://chainz.cryptoid.info/btx/" },
 	{"ticker": "BUM", "function": get_bum, "name": "Bitcoin Uranium", "status" :2 , "CMC": "", "explorer" : "" },
 	{"ticker": "CDY", "function": get_cdy, "name": "Bitcoin Candy (fork of BCH)", "status" : 0 , "CMC": "", "explorer" : "http://block.cdy.one/" },
 	{"ticker": "FBTC", "function": get_fbtc, "name": "Bitcoin Fast", "status" : 2, "CMC": "", "explorer" : "" },
@@ -71,7 +71,7 @@ def main():
 	{"ticker": "OBTC", "function": get_obtc, "name": "Oil Bitcoin", "status" :2 , "CMC": "", "explorer" : "" },
 	{"ticker": "NBTC", "function": get_nbtc, "name": "New Bitcoin", "status" : 2, "CMC": "", "explorer" : "" },
 	{"ticker": "QBTC", "function": get_qbtc, "name": "Quantum Bitcoin", "status" : 2 , "CMC": "", "explorer" : "" },
-	{"ticker": "SBTC", "function": get_superbtc, "name": "Super Bitcoin", "status" : 0, "CMC": "super-bitcoin", "explorer" : "http://block.superbtc.org" },
+	{"ticker": "SBTC", "function": get_superbtc, "name": "Super Bitcoin", "status" : 0, "CMC": "cmc:super-bitcoin", "explorer" : "http://block.superbtc.org" },
 	{"ticker": "UBTC", "function": get_ubtc, "name": "United Bitcoin	", "status" : 1, "CMC": "", "explorer" : "https://www.ub.com/explorer" },
 	{"ticker": "WBTC", "function": get_wbtc, "name": "World Bitcoin", "status" :0, "CMC": "", "explorer" : "http://142.44.242.32:3001" },
 	]
@@ -255,11 +255,14 @@ def main():
 def trypricefetch(testfork, balance):
 	global grandtotal
 	cmc = ""
-	price = ". There is no linkt to coinmarketcap, so we can't find the price"
+	price = ". There is no linkt to coinmarketcap or an exchange, so we can't find the price"
 	for currenttestfork in available_forks:
 		if currenttestfork['ticker'] == testfork:
 			cmc = currenttestfork['CMC']
-	if len(cmc) > 1:
+			split = cmc.split(":")
+			cmc = split[1]
+			type = split[0]
+	if len(cmc) > 1 and type == "cmc" :
 		found = 0
 		for coinmarketlisting in coinmarketcapdb:
 			if cmc == coinmarketlisting['id']:
