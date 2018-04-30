@@ -89,3 +89,9 @@ Since you can now claim a lot of coins on a lot of forks, you're in the ability 
 | BCP | CdGVjF4aDQ78Sv3EtbsfYcXKTBgT5zQEX4 |  
 | CDY | CdGVjF4aDQ78Sv3EtbsfYcXKTBgT5zQEX4 |  
 
+**credits/sources**
+https://github.com/mocacinno/bitcoin_fork_claimer/  
+https://github.com/foozzi/bitcoin-fork-checker  
+https://bitcointalk.org/index.php?topic=2749969.0  
+https://en.bitcoin.it/wiki/List_of_address_prefixes  
+http://list.wiki/Bitcoin_Hard_Forks  
