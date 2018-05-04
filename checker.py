@@ -77,6 +77,20 @@ def main():
 	{"ticker": "WBTC",	"function": get_wbtc,			"name": "World Bitcoin", 				"status": 0, 	"CMC": "tradesat:WBTC_BTC",		"explorer": "http://142.44.242.32:3001" },
 	]
 	
+	parser = argparse.ArgumentParser()
+	parser.add_argument("--address", help="query a single address")
+	parser.add_argument("--addressfile", help="query all addresses in this file")
+	parser.add_argument("--fork", help="query a single fork")
+	parser.add_argument("--showforks", help="show all forks" , action='store_true')
+	parser.add_argument("--verbose", help="show all tests while they are running" , action='store_true')
+	parser.add_argument("--outfile", help="output to this file instead of stdout (screen)")
+	parser.add_argument("--timeout", help="number of seconds to wait between 2 requests", nargs='?', const=2, type=int)
+	parser.add_argument("--secperrequest", help="if a fork check doesn't return an answer for this many seconds, skip the fork", nargs='?', const=30, type=int)
+	parser.add_argument("--maximumstatus", help="maximumstatus 1 = only check chains that can be checked automatically; maximumstatus 2 = also print chains that have to checked manually: minmimstatus 3 = also print out chains that cannot be checked because they are dead or the absense of an explorer", type=int)
+	parser.add_argument("--skipbtc", help="don't check for unspent outputs on the BTC (original) chain", action='store_true')
+	args = parser.parse_args()
+	
+	
 	global coinmarketcapdb
 	try:
 		url = "https://api.coinmarketcap.com/v1/ticker/?limit=10000"
@@ -138,18 +152,7 @@ def main():
 		bitcoincashprice = float(1000)
 		print "i was unable to load the BCH price, so i took the estimation of the end of may 2018: $1000/BCH"
 	
-	parser = argparse.ArgumentParser()
-	parser.add_argument("--address", help="query a single address")
-	parser.add_argument("--addressfile", help="query all addresses in this file")
-	parser.add_argument("--fork", help="query a single fork")
-	parser.add_argument("--showforks", help="show all forks" , action='store_true')
-	parser.add_argument("--verbose", help="show all tests while they are running" , action='store_true')
-	parser.add_argument("--outfile", help="output to this file instead of stdout (screen)")
-	parser.add_argument("--timeout", help="number of seconds to wait between 2 requests", nargs='?', const=2, type=int)
-	parser.add_argument("--secperrequest", help="if a fork check doesn't return an answer for this many seconds, skip the fork", nargs='?', const=30, type=int)
-	parser.add_argument("--maximumstatus", help="maximumstatus 1 = only check chains that can be checked automatically; maximumstatus 2 = also print chains that have to checked manually: minmimstatus 3 = also print out chains that cannot be checked because they are dead or the absense of an explorer", type=int)
-	parser.add_argument("--skipbtc", help="don't check for unspent outputs on the BTC (original) chain", action='store_true')
-	args = parser.parse_args()
+	
 	global verbose
 	if args.verbose:
 		verbose = 1
@@ -196,14 +199,14 @@ def main():
 	if args.fork:
 		for currentfork in available_forks: 
 			if currentfork['ticker'] == args.fork:
-				if args.skipbtc and currentfork['ticker'] == "BTC":
-					print "didnt add BTC to the list of forks to check, since it was disabled by parameter skipbtc"
-				else:
-					forklist = {currentfork['ticker']:currentfork['function']}
+				forklist = {currentfork['ticker']:currentfork['function']}
 	else:
 		for currentfork in available_forks: 
 			if currentfork['status'] < maximumstatus:
-				forklist.update({currentfork['ticker']:currentfork['function']})
+				if args.skipbtc and currentfork['ticker'] == "BTC":
+					print "didnt add BTC to the list of forks to check, since it was disabled by parameter skipbtc"
+				else:
+					forklist.update({currentfork['ticker']:currentfork['function']})
 		
 	if len(forklist) == 0:
 		sys.exit("no forks to check")
