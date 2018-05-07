@@ -20,7 +20,7 @@ If you want to run the script, i recommend:
 **How to run the binary on linux**  
   
  - visit the releases-page: https://github.com/mocacinno/mocacinnoforkchecker/releases
- - download the latest release AND detached signature file
+ - download the latest release AND detached signature file (curl https://keybase.io/mocacinno/pgp_keys.asc | gpg --import && gpg --verify forkchecker_v0.2_compiledwithnuitka.tar.gz.asc forkchecker_v0.2_compiledwithnuitka.tar.gz)  
  - check the signature
  - tar -xvf filename.tar.gz
  - ./checker --help
