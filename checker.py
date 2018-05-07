@@ -20,6 +20,7 @@ def main():
 	{"ticker": "BCA",	"function": get_bca, 			"name": "Bitcoin Atom", 				"status": 1, 	"CMC": "cmc:bitcoin-atom", 		"explorer": "https://bitcoinatom.net" },
 	{"ticker": "BCH",	"function": get_bch, 			"name": "Bitcoin Cash", 				"status": 0, 	"CMC": "cmc:bitcoin-cash", 		"explorer": "https://bitcoincash.blockexplorer.com" },
 	{"ticker": "BCB",	"function": get_bcb, 			"name": "Bitcoin Boy", 					"status": 2, 	"CMC": "", 						"explorer": "" },
+	{"ticker": "BCBC",	"function": get_bcbc, 			"name": "clean blockchain",				"status": 2, 	"CMC": "", 						"explorer": "http://be.cleanblockchain.org/chain/Bitcoin/q/addressbalance/1MocACiWLM8bYn8pCrYjy6uHq4U3CkxLaa" },
 	{"ticker": "BCD",	"function": get_bcd , 			"name": "Bitcoin Diamond", 				"status": 1, 	"CMC": "cmc:bitcoin-diamond",	"explorer": "http://explorer.btcd.io" },
 	{"ticker": "BCHC",	"function": get_bchc, 			"name": "Bitcoin Clashic, also BCL",	"status": 0, 	"CMC": "bisq:bchc_btc", 		"explorer": "https://truevisionofsatoshi.com" },
 	{"ticker": "BCI",	"function": get_bci, 			"name": "Bitcoin Intrest", 				"status": 0, 	"CMC": "tradesat:BCI_BTC",		"explorer": "https://explorer.bitcoininterest.io" },
