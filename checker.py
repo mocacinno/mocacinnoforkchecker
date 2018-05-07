@@ -510,6 +510,11 @@ def fromiquidus(address, baseurl, chain):
 		return -2
 		
 ###############################################################################################
+def get_bcbc(address):
+	if verbose:
+		print "\tBCBC is on my todo list"
+	return -1
+
 def get_btt(address):
 	if verbose:
 		print "\tdidn't find a single explorer for bitcoin top (btt)"
