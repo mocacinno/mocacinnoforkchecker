@@ -66,6 +66,7 @@ def main():
 	{"ticker": "BTW",	"function": get_btw,			"name": "Bitcoin World", 				"status": 2, 	"CMC": "", 						"explorer": "" },
 	{"ticker": "BTX",	"function": get_btx,			"name": "Bitcore", 						"status": 0, 	"CMC": "cmc:bitcore", 			"explorer": "https://chainz.cryptoid.info/btx/" },
 	{"ticker": "BUM",	"function": get_bum,			"name": "Bitcoin Uranium", 				"status": 2, 	"CMC": "", 						"explorer": "" },
+	{"ticker": "CBTC",	"function": get_cbtc,			"name": "Classic Bitcoin",	 			"status": 2, 	"CMC": "",						"explorer": "http://35.229.37.251:3001/insight/" },
 	{"ticker": "CDY",	"function": get_cdy,			"name": "Bitcoin Candy (fork of BCH)", 	"status": 0, 	"CMC": "coinex:CDYBCH",			"explorer": "http://block.cdy.one/" },
 	{"ticker": "FBTC",	"function": get_fbtc,			"name": "Bitcoin Fast", 				"status": 2, 	"CMC": "", 						"explorer": "" },
 	{"ticker": "GOD",	"function": get_god,			"name": "Bitcoin God", 					"status": 2, 	"CMC": "", 						"explorer": "" },
@@ -513,6 +514,11 @@ def fromiquidus(address, baseurl, chain):
 def get_bcbc(address):
 	if verbose:
 		print "\tBCBC is on my todo list"
+	return -1
+	
+def get_cbtc(address):
+	if verbose:
+		print "\tdidn't find a single explorer classicbitcoin (cbtc)"
 	return -1
 
 def get_btt(address):
